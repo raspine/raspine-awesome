@@ -263,7 +263,6 @@ globalkeys = awful.util.table.join(
         awful.client.focus.bydirection("down")
         if client.focus then client.focus:raise() end
       end),
-    --}}}
     awful.key({ modkey,           }, "Tab",
         function ()
             awful.client.focus.history.previous()
@@ -271,7 +270,7 @@ globalkeys = awful.util.table.join(
                 client.focus:raise()
             end
         end),
-    -- }}}
+    --}}}
 
     -- {{{ Client manipulation
     awful.key({ modkey, "Shift"   }, "h",
@@ -455,6 +454,7 @@ clientbuttons = awful.util.table.join(
 
 -- Set keys
 root.keys(globalkeys)
+-- }}}
 -- }}}
 
 -- {{{ Rules
