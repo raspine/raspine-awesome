@@ -45,8 +45,8 @@ end
 beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xterm"
-editor = os.getenv("EDITOR") or "nano"
+terminal = "xterm -ls -xrm 'XTerm*selectToClipboard: true'"
+editor = os.getenv("EDITOR") or "gvim" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
@@ -55,22 +55,16 @@ editor_cmd = terminal .. " -e " .. editor
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
+altkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts =
 {
-    awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
     awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
-    awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier
 }
 -- }}}
 
@@ -228,7 +222,7 @@ globalkeys = awful.util.table.join(
     -- {{{ Show Menu
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
     --}}}
- 
+
     -- {{{ Config files
     awful.key({ modkey, "e"   }, "a", function () awful.util.spawn("gvim /home/jsc/homescripts/rc.lua")    end),
     -- }}}
@@ -264,7 +258,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     -- }}}
- 
+
     -- {{{ Layout manipulation
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
@@ -276,6 +270,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
     --}}}
 
+    --{{{ Program control
     -- {{{ Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
@@ -283,6 +278,16 @@ globalkeys = awful.util.table.join(
 
 
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
+    --}}}
+
+    --{{{ Copy to clipboard
+    awful.key({ "Ctrl", "Shift" }, "c", function () os.execute("xsel -p -o | xsel -i -b") end),
+    --}}}
+
+    --{{{ User programs
+    awful.key({ "altkey", }, "c", function () awful.util.spawn("chromium") end),
+    awful.key({ "altkey", }, "f", function () awful.util.spawn("firefox") end),
+    awful.key({ "altkey", }, "v", function () awful.util.spawn("xterm -e vifm") end),
     --}}}
 
     -- {{{ Prompt
@@ -295,7 +300,8 @@ globalkeys = awful.util.table.join(
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end),
-    --}}}
+    -- }}}
+    -- }}}
 
     -- {{{ Menubar
     awful.key({ modkey }, "p", function() menubar.show() end)
