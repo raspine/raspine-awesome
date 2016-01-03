@@ -228,17 +228,41 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Client focus
-    awful.key({ modkey,           }, "j",
-        function ()
-            awful.client.focus.byidx( 1)
-            if client.focus then client.focus:raise() end
-        end),
-    awful.key({ modkey,           }, "k",
-        function ()
-            awful.client.focus.byidx(-1)
-            if client.focus then client.focus:raise() end
-        end),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
+    awful.key({ modkey }, "h",
+    function()
+    if awful.layout.get(client.focus.screen) == awful.layout.suit.fair then
+      awful.client.focus.bydirection("left")
+      elseif awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
+        -- We want to focus the previous focused slave window
+        awful.client.focus.history.previous()
+        elseif awful.layout.get(client.focus.screen) == awful.layout.suit.tile then
+          -- Straight forward we focus left if we can
+          awful.client.focus.bydirection("left")
+        end
+        if client.focus then client.focus:raise() end
+      end),
+    awful.key({ modkey }, "l",
+    function()
+    if awful.layout.get(client.focus.screen) == awful.layout.suit.fair then
+      awful.client.focus.bydirection("right")
+      elseif awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
+        awful.client.focus.bydirection("right")
+        elseif awful.layout.get(client.focus.screen) == awful.layout.suit.tile then
+          -- We want to focus the previous focused slave window
+          awful.client.focus.history.previous()
+        end
+        if client.focus then client.focus:raise() end
+      end),
+      awful.key({ modkey }, "k",
+      function()
+        awful.client.focus.bydirection("up")
+        if client.focus then client.focus:raise() end
+      end),
+      awful.key({ modkey }, "j",
+      function()
+        awful.client.focus.bydirection("down")
+        if client.focus then client.focus:raise() end
+      end),
     awful.key({ modkey,           }, "Tab",
         function ()
             awful.client.focus.history.previous()
@@ -246,11 +270,59 @@ globalkeys = awful.util.table.join(
                 client.focus:raise()
             end
         end),
-    -- }}}
+    --}}}
 
     -- {{{ Client manipulation
-    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
-    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
+    awful.key({ modkey, "Shift"   }, "h",
+    function ()
+    if awful.layout.get(client.focus.screen) == awful.layout.suit.fair then
+      awful.client.swap.bydirection("left")
+    elseif awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
+        -- We aim to shift left but this command always puts the slave window 
+        -- in the top of the slave column. So to keep the order of our slave
+        -- windows intact we we use history buffer and focus the last slave
+        -- window and shift this left, then we focus back so our focus 
+        -- follows the window.
+        awful.client.focus.history.previous()
+        awful.client.swap.bydirection("right")
+        --awful.client.focus.history.previous()
+     elseif awful.layout.get(client.focus.screen) == awful.layout.suit.tile then
+        -- put the master window in the history buffer first
+        awful.client.focus.bydirection("left")
+        awful.client.focus.history.previous()
+        awful.client.swap.bydirection("left")
+     end
+    end),
+    awful.key({ modkey, "Shift"   }, "l",
+    function ()
+    if awful.layout.get(client.focus.screen) == awful.layout.suit.fair then
+      awful.client.swap.bydirection("right")
+    elseif awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
+      -- put the master window in the history buffer first
+      awful.client.focus.bydirection("right")
+      awful.client.focus.history.previous()
+      awful.client.swap.bydirection("right")
+    elseif awful.layout.get(client.focus.screen) == awful.layout.suit.tile then
+      -- We aim to shift right but this command always puts the slave window 
+      -- in the top of the slave column. So to keep the order of our slave
+      -- windows intact we we use history buffer and focus the last slave
+      -- window and shift this left, then we focus back so our focus 
+      -- follows the window.
+      --local c = awful.client.next(0)
+      awful.client.focus.history.previous()
+      awful.client.swap.bydirection("left")
+      --awful.client.focus.history.add(c);
+      --awful.client.focus.history.previous()
+    end
+    end),
+    awful.key({ modkey, "Shift"   }, "k",
+    function () 
+    awful.client.swap.bydirection("up")
+    end),
+    awful.key({ modkey, "Shift"   }, "j",
+    function () 
+    awful.client.swap.bydirection("down")
+    end),
     -- }}}
 
     -- {{{ Screen manipulation
@@ -260,12 +332,12 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Layout manipulation
-    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
-    awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
-    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
-    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
+    awful.key({ modkey, "Shift"   }, "Right",     function () awful.tag.incmwfact( 0.05)    end),
+    awful.key({ modkey, "Shift"   }, "Left",     function () awful.tag.incmwfact(-0.05)    end),
+    --awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
+    --awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
+    --awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
+    --awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
     --}}}
@@ -382,6 +454,7 @@ clientbuttons = awful.util.table.join(
 
 -- Set keys
 root.keys(globalkeys)
+-- }}}
 -- }}}
 
 -- {{{ Rules
