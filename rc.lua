@@ -285,9 +285,9 @@ globalkeys = awful.util.table.join(
     --}}}
 
     --{{{ User programs
-    awful.key({ "altkey", }, "c", function () awful.util.spawn("chromium") end),
-    awful.key({ "altkey", }, "f", function () awful.util.spawn("firefox") end),
-    awful.key({ "altkey", }, "v", function () awful.util.spawn("xterm -e vifm") end),
+    awful.key({ altkey, }, "c", function () awful.util.spawn("chromium") end),
+    awful.key({ altkey, }, "f", function () awful.util.spawn("firefox") end),
+    awful.key({ altkey, }, "v", function () awful.util.spawn("xterm -e vifm") end),
     --}}}
 
     -- {{{ Prompt
