@@ -1,3 +1,6 @@
+-- vim: ts=4:sw=4:et:fdm=marker:foldenable:foldlevel=0:fdc=5:nonu:nornu
+
+
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -229,6 +232,10 @@ globalkeys = awful.util.table.join(
             if client.focus then client.focus:raise() end
         end),
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
+
+    -- {{{ Config files
+    awful.key({ modkey, "e"   }, "a", function () awful.util.spawn("gvim /home/jsc/homescripts/rc.lua")    end),
+    -- }}}
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
