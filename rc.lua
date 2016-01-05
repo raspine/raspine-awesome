@@ -211,7 +211,6 @@ root.buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Key bindings
-
 globalkeys = awful.util.table.join(
   -- {{{ Tag browsing
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
@@ -228,6 +227,7 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Client focus
+    -- {{{ Focus left
     awful.key({ modkey }, "h",
         function()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
@@ -238,6 +238,8 @@ globalkeys = awful.util.table.join(
             end
             if client.focus then client.focus:raise() end
         end),
+    -- }}}
+    -- {{{ Focus right
     awful.key({ modkey }, "l",
         function()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile then
@@ -248,6 +250,8 @@ globalkeys = awful.util.table.join(
             end
             if client.focus then client.focus:raise() end
         end),
+    -- }}}
+    -- {{{ Focus up
     awful.key({ modkey }, "k",
         function()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.top then
@@ -258,6 +262,8 @@ globalkeys = awful.util.table.join(
             end
             if client.focus then client.focus:raise() end
         end),
+    -- }}}
+    -- {{{ Focus down
     awful.key({ modkey }, "j",
         function()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.bottom then
@@ -268,14 +274,18 @@ globalkeys = awful.util.table.join(
             end
             if client.focus then client.focus:raise() end
         end),
+    -- }}}
+    -- {{{ Focus by history
     awful.key({ modkey,           }, "Tab",
         function ()
             awful.client.focus.history.previous()
             if client.focus then client.focus:raise() end
         end),
     -- }}}
+    -- }}}
 
     -- {{{ Client manipulation
+    -- {{{ Shift left
     awful.key({ modkey, "Shift"   }, "h",
         function ()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
@@ -296,6 +306,8 @@ globalkeys = awful.util.table.join(
                 awful.client.swap.bydirection("left")
             end
         end),
+    -- }}}
+    -- {{{ Shift right
     awful.key({ modkey, "Shift"   }, "l",
         function ()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
@@ -316,6 +328,8 @@ globalkeys = awful.util.table.join(
                 awful.client.swap.bydirection("right")
             end
         end),
+    -- }}}
+    -- {{{ Shift down
     awful.key({ modkey, "Shift"   }, "j",
         function () 
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.bottom then
@@ -336,6 +350,8 @@ globalkeys = awful.util.table.join(
                 awful.client.swap.bydirection("down")
             end
         end),
+    -- }}}
+    -- {{{ Shift up
     awful.key({ modkey, "Shift"   }, "k",
         function () 
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.bottom then
@@ -356,6 +372,7 @@ globalkeys = awful.util.table.join(
                 awful.client.swap.bydirection("up")
             end
         end),
+    -- }}}
     -- }}}
 
     -- {{{ Screen manipulation
