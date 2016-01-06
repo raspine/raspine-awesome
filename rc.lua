@@ -227,7 +227,7 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Client focus
-    -- {{{ Focus left
+    -- {{{ Focus left       (mod + h)
     awful.key({ modkey }, "h",
         function()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
@@ -239,7 +239,7 @@ globalkeys = awful.util.table.join(
             if client.focus then client.focus:raise() end
         end),
     -- }}}
-    -- {{{ Focus right
+    -- {{{ Focus right      (mod + l)
     awful.key({ modkey }, "l",
         function()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile then
@@ -251,7 +251,7 @@ globalkeys = awful.util.table.join(
             if client.focus then client.focus:raise() end
         end),
     -- }}}
-    -- {{{ Focus up
+    -- {{{ Focus up         (mod + k)
     awful.key({ modkey }, "k",
         function()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.top then
@@ -263,7 +263,7 @@ globalkeys = awful.util.table.join(
             if client.focus then client.focus:raise() end
         end),
     -- }}}
-    -- {{{ Focus down
+    -- {{{ Focus down       (mod + j)
     awful.key({ modkey }, "j",
         function()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.bottom then
@@ -275,7 +275,7 @@ globalkeys = awful.util.table.join(
             if client.focus then client.focus:raise() end
         end),
     -- }}}
-    -- {{{ Focus by history
+    -- {{{ Focus by history (mod + tab)
     awful.key({ modkey,           }, "Tab",
         function ()
             awful.client.focus.history.previous()
@@ -285,7 +285,7 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Client manipulation
-    -- {{{ Shift left
+    -- {{{ Swap left       (mod + H)
     awful.key({ modkey, "Shift"   }, "h",
         function ()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
@@ -307,7 +307,7 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Shift right
+    -- {{{ Swap right      (mod + L)
     awful.key({ modkey, "Shift"   }, "l",
         function ()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
@@ -329,7 +329,29 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Shift down
+    -- {{{ Swap up         (mod + K)
+    awful.key({ modkey, "Shift"   }, "k",
+        function () 
+            if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.bottom then
+                -- put the master window in the history buffer first
+                awful.client.focus.bydirection("up")
+                awful.client.focus.history.previous()
+                awful.client.swap.bydirection("up")
+            elseif awful.layout.get(client.focus.screen) == awful.layout.suit.tile.top then
+                -- We aim to shift up but this command always puts the slave window 
+                -- in the left of the slave column. So to keep the order of our slave
+                -- windows intact we we use history buffer and focus the last slave
+                -- window and shift this down.
+                awful.client.focus.history.previous()
+                awful.client.swap.bydirection("down")
+                -- Enable let focus follow the client.
+                --awful.client.focus.history.previous()
+            else
+                awful.client.swap.bydirection("up")
+            end
+        end),
+    -- }}}
+    -- {{{ Swap down       (mod + J)
     awful.key({ modkey, "Shift"   }, "j",
         function () 
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.bottom then
@@ -351,25 +373,55 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Shift up
-    awful.key({ modkey, "Shift"   }, "k",
-        function () 
-            if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.bottom then
-                -- put the master window in the history buffer first
+    -- {{{ Move left       (mod + ctrl + h)
+    awful.key({ modkey, "Ctrl"   }, "h",
+        function ()
+            if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile then
+                awful.layout.set(awful.layout.suit.tile)
+            end
+            if awful.client.getmaster() ~= awful.client.next(0) then
+                awful.client.focus.bydirection("left")
+                awful.client.focus.history.previous()
+                awful.client.swap.bydirection("left")
+            end
+        end),
+    -- }}}
+    -- {{{ Move right      (mod + ctrl + l)
+    awful.key({ modkey, "Ctrl"   }, "l",
+        function ()
+            if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.left then
+                awful.layout.set(awful.layout.suit.tile.left)
+            end
+            if awful.client.getmaster() ~= awful.client.next(0) then
+                awful.client.focus.bydirection("right")
+                awful.client.focus.history.previous()
+                awful.client.swap.bydirection("right")
+            end
+        end),
+    -- }}}
+    -- {{{ Move up         (mod + ctrl + k)
+    awful.key({ modkey, "Ctrl"   }, "k",
+        function ()
+            if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.bottom then
+                awful.layout.set(awful.layout.suit.tile.bottom)
+            end
+            if awful.client.getmaster() ~= awful.client.next(0) then
                 awful.client.focus.bydirection("up")
                 awful.client.focus.history.previous()
                 awful.client.swap.bydirection("up")
-            elseif awful.layout.get(client.focus.screen) == awful.layout.suit.tile.top then
-                -- We aim to shift up but this command always puts the slave window 
-                -- in the left of the slave column. So to keep the order of our slave
-                -- windows intact we we use history buffer and focus the last slave
-                -- window and shift this down.
+            end
+        end),
+    -- }}}
+    -- {{{ Move down       (mod + ctrl + j)
+    awful.key({ modkey, "Ctrl"   }, "j",
+        function ()
+            if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.top then
+                awful.layout.set(awful.layout.suit.tile.top)
+            end
+            if awful.client.getmaster() ~= awful.client.next(0) then
+                awful.client.focus.bydirection("down")
                 awful.client.focus.history.previous()
                 awful.client.swap.bydirection("down")
-                -- Enable let focus follow the client.
-                --awful.client.focus.history.previous()
-            else
-                awful.client.swap.bydirection("up")
             end
         end),
     -- }}}
