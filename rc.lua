@@ -230,11 +230,10 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus left       (mod + h)
     awful.key({ modkey }, "h",
         function()
-            if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
-                -- We want to focus the previous focused slave window
-                awful.client.focus.history.previous()
-            else
+            if awful.client.getmaster() ~= awful.client.next(0) then
                 awful.client.focus.bydirection("left")
+            else
+                awful.client.focus.history.previous()
             end
             if client.focus then client.focus:raise() end
         end),
@@ -242,11 +241,10 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus right      (mod + l)
     awful.key({ modkey }, "l",
         function()
-            if awful.layout.get(client.focus.screen) == awful.layout.suit.tile then
-                -- We want to focus the previous focused slave window
-                awful.client.focus.history.previous()
-            else
+            if awful.client.getmaster() ~= awful.client.next(0) then
                 awful.client.focus.bydirection("right")
+            else
+                awful.client.focus.history.previous()
             end
             if client.focus then client.focus:raise() end
         end),
@@ -254,11 +252,10 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus up         (mod + k)
     awful.key({ modkey }, "k",
         function()
-            if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.top then
-                -- We want to focus the previous focused slave window
-                awful.client.focus.history.previous()
-            else
+            if awful.client.getmaster() ~= awful.client.next(0) then
                 awful.client.focus.bydirection("up")
+            else
+                awful.client.focus.history.previous()
             end
             if client.focus then client.focus:raise() end
         end),
@@ -266,11 +263,10 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus down       (mod + j)
     awful.key({ modkey }, "j",
         function()
-            if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.bottom then
-                -- We want to focus the previous focused slave window
-                awful.client.focus.history.previous()
-            else
+            if awful.client.getmaster() ~= awful.client.next(0) then
                 awful.client.focus.bydirection("down")
+            else
+                awful.client.focus.history.previous()
             end
             if client.focus then client.focus:raise() end
         end),
