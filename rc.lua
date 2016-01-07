@@ -230,10 +230,10 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus left       (mod + h)
     awful.key({ modkey }, "h",
         function()
-            if awful.client.getmaster() ~= awful.client.next(0) then
-                awful.client.focus.bydirection("left")
-            else
+            if awful.client.getmaster() == awful.client.next(0) then
                 awful.client.focus.history.previous()
+            else
+                awful.client.focus.bydirection("left")
             end
             if client.focus then client.focus:raise() end
         end),
@@ -241,10 +241,10 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus right      (mod + l)
     awful.key({ modkey }, "l",
         function()
-            if awful.client.getmaster() ~= awful.client.next(0) then
-                awful.client.focus.bydirection("right")
-            else
+            if awful.client.getmaster() == awful.client.next(0) then
                 awful.client.focus.history.previous()
+            else
+                awful.client.focus.bydirection("right")
             end
             if client.focus then client.focus:raise() end
         end),
@@ -252,10 +252,10 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus up         (mod + k)
     awful.key({ modkey }, "k",
         function()
-            if awful.client.getmaster() ~= awful.client.next(0) then
-                awful.client.focus.bydirection("up")
-            else
+            if awful.client.getmaster() == awful.client.next(0) then
                 awful.client.focus.history.previous()
+            else
+                awful.client.focus.bydirection("up")
             end
             if client.focus then client.focus:raise() end
         end),
@@ -263,10 +263,10 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus down       (mod + j)
     awful.key({ modkey }, "j",
         function()
-            if awful.client.getmaster() ~= awful.client.next(0) then
-                awful.client.focus.bydirection("down")
-            else
+            if awful.client.getmaster() == awful.client.next(0) then
                 awful.client.focus.history.previous()
+            else
+                awful.client.focus.bydirection("down")
             end
             if client.focus then client.focus:raise() end
         end),
