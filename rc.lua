@@ -368,8 +368,8 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move left       (mod + ctrl + h)
-    awful.key({ modkey, "Ctrl"   }, "h",
+    -- {{{ Move left       (mod + alt + h)
+    awful.key({ modkey, altkey   }, "h",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile then
                 awful.layout.set(awful.layout.suit.tile)
@@ -381,8 +381,8 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move right      (mod + ctrl + l)
-    awful.key({ modkey, "Ctrl"   }, "l",
+    -- {{{ Move right      (mod + alt + l)
+    awful.key({ modkey, altkey   }, "l",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.left then
                 awful.layout.set(awful.layout.suit.tile.left)
@@ -394,8 +394,8 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move up         (mod + ctrl + k)
-    awful.key({ modkey, "Ctrl"   }, "k",
+    -- {{{ Move up         (mod + alt + k)
+    awful.key({ modkey, altkey   }, "k",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.bottom then
                 awful.layout.set(awful.layout.suit.tile.bottom)
@@ -407,8 +407,8 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move down       (mod + ctrl + j)
-    awful.key({ modkey, "Ctrl"   }, "j",
+    -- {{{ Move down       (mod + alt + j)
+    awful.key({ modkey, altkey   }, "j",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.top then
                 awful.layout.set(awful.layout.suit.tile.top)
@@ -420,11 +420,39 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
+    -- {{{ Move to first screen    (mod + Shift + F1)
+    awful.key({ modkey, "Shift"   }, "F1",     function(c) awful.client.movetoscreen(c,3) end),
+    -- }}}
+    -- {{{ Move to second screen    (mod + Shift + F2)
+    awful.key({ modkey, "Shift"   }, "F2",     function(c) awful.client.movetoscreen(c,1) end),
+    -- }}}
+    -- {{{ Move to third screen    (mod + Shift + F3)
+    awful.key({ modkey, "Shift"   }, "F3",     function(c) awful.client.movetoscreen(c,2) end),
+    -- }}}
+    -- {{{ Move to left screen    (mod + ctrl + H)
+    -- TODO
+    -- }}}
+    -- {{{ Move to right screen    (mod + ctrl + L)
+    -- TODO
+    -- }}}
     -- }}}
 
     -- {{{ Screen manipulation
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
+    -- {{{ Focus first screen    (mod + F1)
+    awful.key({ modkey,           }, "F1",     function(c) awful.screen.focus(3) end),
+    -- }}}
+    -- {{{ Focus second screen    (mod + F2)
+    awful.key({ modkey,           }, "F2",     function(c) awful.screen.focus(1) end),
+    -- }}}
+    -- {{{ Focus third screen    (mod + F3)
+    awful.key({ modkey,           }, "F3",     function(c) awful.screen.focus(2) end),
+    -- }}}
+    -- {{{ Focus to left screen   (mod + ctrl + h)
+    awful.key({ modkey, "Control" }, "h", function () awful.screen.focus_bydirection("left") end),
+    -- }}}
+    -- {{{ Focus to right screen    (mod + ctrl + l)
+    awful.key({ modkey, "Control" }, "l", function () awful.screen.focus_bydirection("right") end),
+    -- }}}
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     -- }}}
 
