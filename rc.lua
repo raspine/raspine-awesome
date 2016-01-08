@@ -252,8 +252,9 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus right      (mod + l)
     awful.key({ modkey }, "l",
         function()
-            if awful.client.getmaster() == awful.client.next(0) then
-                awful.client.focus.history.previous()
+            if awful.client.getmaster() == awful.client.next(0) and
+                awful.client.focus.history.get(client.focus.screen, 1) then
+                    awful.client.focus.history.previous()
             else
                 awful.client.focus.bydirection("right")
             end
@@ -263,7 +264,8 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus up         (mod + k)
     awful.key({ modkey }, "k",
         function()
-            if awful.client.getmaster() == awful.client.next(0) then
+            if awful.client.getmaster() == awful.client.next(0) and
+                awful.client.focus.history.get(client.focus.screen, 1) then
                 awful.client.focus.history.previous()
             else
                 awful.client.focus.bydirection("up")
@@ -274,7 +276,8 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus down       (mod + j)
     awful.key({ modkey }, "j",
         function()
-            if awful.client.getmaster() == awful.client.next(0) then
+            if awful.client.getmaster() == awful.client.next(0) and
+                awful.client.focus.history.get(client.focus.screen, 1) then
                 awful.client.focus.history.previous()
             else
                 awful.client.focus.bydirection("down")
@@ -595,7 +598,7 @@ root.keys(globalkeys)
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
-      properties = { border_width = beautiful.border_width,
+      properties = { border_width = 5,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
                      raise = true,
