@@ -226,6 +226,17 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "e"   }, "a", function () awful.util.spawn("gvim /home/jsc/.config/awesome/rc.lua")    end),
     -- }}}
 
+    -- {{{ Test     (mod + t)
+    awful.key({ modkey }, "t",
+        function()
+            local pos = awful.client.idx(client.focus)
+            naughty.notify({ bg = '#eeeeee',
+                             fg = '#444444',
+                             title = "Test",
+                             text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
+         end),
+    -- }}}
+
     -- {{{ Client focus
     -- {{{ Focus left       (mod + h)
     awful.key({ modkey }, "h",
@@ -499,6 +510,7 @@ globalkeys = awful.util.table.join(
     -- {{{ Menubar
     awful.key({ modkey }, "p", function() menubar.show() end)
     --}}}
+
 )
 
 clientkeys = awful.util.table.join(
