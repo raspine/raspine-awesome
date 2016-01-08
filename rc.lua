@@ -232,7 +232,7 @@ globalkeys = awful.util.table.join(
             local pos = awful.client.idx(client.focus)
             naughty.notify({ bg = '#eeeeee',
                              fg = '#444444',
-                             title = "Test",
+                             title = "Result of test",
                              text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
          end),
     -- }}}
