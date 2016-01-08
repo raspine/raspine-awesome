@@ -223,7 +223,7 @@ globalkeys = awful.util.table.join(
     --}}}
 
     -- {{{ Config files
-    awful.key({ modkey, "e"   }, "a", function () awful.util.spawn("gvim /home/jsc/homescripts/rc.lua")    end),
+    awful.key({ modkey, "e"   }, "a", function () awful.util.spawn("gvim /home/jsc/.config/awesome/rc.lua")    end),
     -- }}}
 
     -- {{{ Client focus
