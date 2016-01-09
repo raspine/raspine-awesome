@@ -1,0 +1,11 @@
+#peru
+.peru/
+themes/
+
+#vim
+*~
+
+#ctags
+tags
+
+
