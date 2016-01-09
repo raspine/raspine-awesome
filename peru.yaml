@@ -5,3 +5,6 @@ git module themes:
     url: https://github.com/mikar/awesome-themes
     reup: master
     rev: 328f604fd29823fcfe9ffca865585682a310e835
+    pick:
+      - crown/*
+      - holo/*

@@ -42,7 +42,8 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+beautiful.init(awful.util.getdir("config") .. "/themes/crown/theme.lua")
+--beautiful.init(awful.util.getdir("config") .. "/themes/holo/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "xterm -ls -xrm 'XTerm*selectToClipboard: true'"
@@ -230,8 +231,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "t",
         function()
             local pos = awful.client.idx(client.focus)
-            naughty.notify({ bg = '#eeeeee',
-                             fg = '#444444',
+            naughty.notify({-- bg = '#eeeeee',
+                            -- fg = '#444444',
                              title = "Result of test",
                              text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
          end),
