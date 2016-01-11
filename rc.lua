@@ -42,7 +42,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(awful.util.getdir("config") .. "/themes/crown/theme.lua")
+beautiful.init(awful.util.getdir("config") .. "/themes/material/theme.lua")
 --beautiful.init(awful.util.getdir("config") .. "/themes/holo/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
@@ -599,7 +599,7 @@ root.keys(globalkeys)
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
-      properties = { border_width = 5,
+      properties = { border_width = 3,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
                      raise = true,

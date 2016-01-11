@@ -1,10 +1,14 @@
 imports:
-    themes: themes
+    material-theme: themes/material
+    holo-theme: themes
 
-git module themes:
+git module material-theme:
+    url: https://github.com/raspine/awesome-material-theme
+    reup: master
+    rev: aba76558ced3e450faa63d27f428819caf37d633
+
+git module holo-theme:
     url: https://github.com/mikar/awesome-themes
     reup: master
     rev: 328f604fd29823fcfe9ffca865585682a310e835
-    pick:
-      - crown/*
-      - holo/*
+    pick: holo
