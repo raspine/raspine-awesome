@@ -40,6 +40,21 @@ do
 end
 -- }}}
 
+-- {{{ Autostart applications
+function run_once(cmd)
+  findme = cmd
+  firstspace = cmd:find(" ")
+  if firstspace then
+    findme = cmd:sub(0, firstspace-1)
+  end
+  awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
+end
+
+run_once("urxvtd")
+run_once("unclutter")
+run_once("unagi")
+-- }}}
+
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(awful.util.getdir("config") .. "/themes/material/theme.lua")
@@ -66,6 +81,7 @@ local layouts =
     awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
     awful.layout.suit.fair,
+    awful.layout.suit.floating,
 }
 -- }}}
 
@@ -231,10 +247,14 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "t",
         function()
             local pos = awful.client.idx(client.focus)
-            naughty.notify({-- bg = '#eeeeee',
-                            -- fg = '#444444',
-                             title = "Result of test",
-                             text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
+            if pos then
+                naughty.notify({ 
+                                 border_width = 0,
+                                 bg = beautiful.bg_focus,
+                                 fg = beautiful.fg_focus,
+                                 title = "Result of test",
+                                 text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
+           end
          end),
     -- }}}
 
@@ -686,6 +706,14 @@ client.connect_signal("manage", function (c, startup)
     end
 end)
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.connect_signal("focus",
+function(c)
+    c.border_color = beautiful.border_focus
+    c.opacity=1
+end)
+client.connect_signal("unfocus",
+function(c)
+    c.border_color = beautiful.border_normal
+    c.opacity=0.85
+end)
 -- }}}
