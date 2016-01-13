@@ -45,13 +45,14 @@ function run_once(cmd)
   findme = cmd
   firstspace = cmd:find(" ")
   if firstspace then
-    findme = cmd:sub(0, firstspace-1)
+     findme = cmd:sub(0, firstspace-1)
   end
   awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
 end
 
-run_once("urxvtd")
-run_once("unclutter")
+--run_once("urxvtd")
+--run_once("unclutter")
+run_once("xmodmap /home/jsc/.Xmodmap")
 run_once("unagi")
 -- }}}
 
@@ -622,6 +623,7 @@ awful.rules.rules = {
       properties = { border_width = 3,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
+                     size_hints_honor = false,
                      raise = true,
                      keys = clientkeys,
                      buttons = clientbuttons } },
@@ -709,11 +711,11 @@ end)
 client.connect_signal("focus",
 function(c)
     c.border_color = beautiful.border_focus
-    c.opacity=1
+    c.opacity = 1
 end)
 client.connect_signal("unfocus",
 function(c)
     c.border_color = beautiful.border_normal
-    c.opacity=0.85
+    c.opacity = 0.85
 end)
 -- }}}
