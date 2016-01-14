@@ -62,7 +62,8 @@ beautiful.init(awful.util.getdir("config") .. "/themes/material/theme.lua")
 --beautiful.init(awful.util.getdir("config") .. "/themes/holo/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xterm -ls -xrm 'XTerm*selectToClipboard: true'"
+--terminal = "xterm -ls -xrm 'XTerm*selectToClipboard: true'"
+terminal = "gnome-terminal"
 editor = os.getenv("EDITOR") or "gvim" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -263,10 +264,12 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus left       (mod + h)
     awful.key({ modkey }, "h",
         function()
-            if awful.client.getmaster() == awful.client.next(0) then
-                awful.client.focus.history.previous()
+            if awful.client.getmaster() == awful.client.next(0) and
+                awful.client.focus.history.get(client.focus.screen, 1) and
+                awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
+                    awful.client.focus.history.previous()
             else
-                awful.client.focus.bydirection("left")
+                awful.client.focus.global_bydirection("left")
             end
             if client.focus then client.focus:raise() end
         end),
@@ -275,10 +278,11 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "l",
         function()
             if awful.client.getmaster() == awful.client.next(0) and
-                awful.client.focus.history.get(client.focus.screen, 1) then
+                awful.client.focus.history.get(client.focus.screen, 1) and
+                awful.layout.get(client.focus.screen) == awful.layout.suit.tile then
                     awful.client.focus.history.previous()
             else
-                awful.client.focus.bydirection("right")
+                awful.client.focus.global_bydirection("right")
             end
             if client.focus then client.focus:raise() end
         end),
@@ -400,8 +404,8 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move left       (mod + alt + h)
-    awful.key({ modkey, altkey   }, "h",
+    -- {{{ Move left       (mod + ctrl + h)
+    awful.key({ modkey, "Control"   }, "h",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile then
                 awful.layout.set(awful.layout.suit.tile)
@@ -413,8 +417,8 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move right      (mod + alt + l)
-    awful.key({ modkey, altkey   }, "l",
+    -- {{{ Move right      (mod + ctrl + l)
+    awful.key({ modkey, "Control"   }, "l",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.left then
                 awful.layout.set(awful.layout.suit.tile.left)
@@ -426,8 +430,8 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move up         (mod + alt + k)
-    awful.key({ modkey, altkey   }, "k",
+    -- {{{ Move up         (mod + ctrl + k)
+    awful.key({ modkey, "Control"   }, "k",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.bottom then
                 awful.layout.set(awful.layout.suit.tile.bottom)
@@ -439,8 +443,8 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move down       (mod + alt + j)
-    awful.key({ modkey, altkey   }, "j",
+    -- {{{ Move down       (mod + ctrl + j)
+    awful.key({ modkey, "Control"   }, "j",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.top then
                 awful.layout.set(awful.layout.suit.tile.top)
@@ -479,12 +483,6 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus third screen    (mod + F3)
     awful.key({ modkey,           }, "F3",     function(c) awful.screen.focus(2) end),
     -- }}}
-    -- {{{ Focus to left screen   (mod + ctrl + h)
-    awful.key({ modkey, "Control" }, "h", function () awful.screen.focus_bydirection("left") end),
-    -- }}}
-    -- {{{ Focus to right screen    (mod + ctrl + l)
-    awful.key({ modkey, "Control" }, "l", function () awful.screen.focus_bydirection("right") end),
-    -- }}}
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     -- }}}
 
@@ -516,7 +514,8 @@ globalkeys = awful.util.table.join(
     --{{{ User programs
     awful.key({ altkey, }, "c", function () awful.util.spawn("chromium") end),
     awful.key({ altkey, }, "f", function () awful.util.spawn("firefox") end),
-    awful.key({ altkey, }, "v", function () awful.util.spawn("xterm -e vifm") end),
+    awful.key({ altkey, }, "v", function () awful.util.spawn("gnome-terminal -e vifm") end),
+    awful.key({ altkey, }, "g", function () awful.util.spawn("xterm -e gvim") end),
     --}}}
 
     -- {{{ Prompt

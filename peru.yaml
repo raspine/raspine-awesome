@@ -5,7 +5,7 @@ imports:
 git module material-theme:
     url: https://github.com/raspine/awesome-material-theme
     reup: master
-    rev: 25d732d51a64ca69f4da29d82dc25012bf0ccb3c
+    rev: 6e2b60866d563606bf427a23d1d56874331fe410
 
 git module holo-theme:
     url: https://github.com/mikar/awesome-themes
