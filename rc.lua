@@ -275,7 +275,7 @@ globalkeys = awful.util.table.join(
     --}}}
 
     -- {{{ Config files
-    awful.key({ modkey, "e"   }, "a", function () awful.util.spawn("gvim /home/jsc/.config/awesome/rc.lua")    end),
+    awful.key({ modkey, "Control"   }, "a", function () awful.util.spawn("gvim /home/jsc/.config/awesome/rc.lua")    end),
     -- }}}
 
     -- {{{ Test     (mod + t)
@@ -599,15 +599,14 @@ clientkeys = awful.util.table.join(
             end)
     --}}}
 )
--- }}}
 
--- {{{ Bind all key numbers to tags.
+-- {{{ Tag manipulation
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, 9 do
     globalkeys = awful.util.table.join(globalkeys,
-        -- View tag only.
-        awful.key({ modkey }, "#" .. i + 9,
+        --{{{ View exclusive tag    (mod + alt + #)
+        awful.key({ modkey, altkey }, "#" .. i + 9,
                   function ()
                         local screen = mouse.screen
                         local tag = awful.tag.gettags(screen)[i]
@@ -615,7 +614,8 @@ for i = 1, 9 do
                            awful.tag.viewonly(tag)
                         end
                   end),
-        -- Toggle tag.
+        --}}}
+        --{{{ Toggle view tag       (mod + ctrl + #)
         awful.key({ modkey, "Control" }, "#" .. i + 9,
                   function ()
                       local screen = mouse.screen
@@ -624,7 +624,8 @@ for i = 1, 9 do
                          awful.tag.viewtoggle(tag)
                       end
                   end),
-        -- Move client to tag.
+        --}}}
+        --{{{ Move client to tag    (mod + shift + #)
         awful.key({ modkey, "Shift" }, "#" .. i + 9,
                   function ()
                       if client.focus then
@@ -634,8 +635,9 @@ for i = 1, 9 do
                           end
                      end
                   end),
-        -- Toggle tag.
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+        --}}}
+        --{{{ Toggle tag on client  (mod + #)
+        awful.key({ modkey }, "#" .. i + 9,
                   function ()
                       if client.focus then
                           local tag = awful.tag.gettags(client.focus.screen)[i]
@@ -644,13 +646,32 @@ for i = 1, 9 do
                           end
                       end
                   end))
+         --}}}
 end
+
+globalkeys = awful.util.table.join(globalkeys,
+        --{{{ Toggle all tags on client  (mod + a)
+        awful.key({ modkey }, "a",
+                  function ()
+                    if client.focus then
+                        for i = 1, 9 do
+                            local tag = awful.tag.gettags(client.focus.screen)[i]
+                            if tag then
+                                if tag ~= awful.tag.selected(client.focus.screen) then
+                                    awful.client.toggletag(tag)
+                                end
+                            end
+                        end
+                    end
+                  end))
+         --}}}
 
 clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 
+-- }}}
 -- Set keys
 root.keys(globalkeys)
 -- }}}
