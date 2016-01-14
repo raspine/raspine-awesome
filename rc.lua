@@ -52,7 +52,6 @@ end
 
 --run_once("urxvtd")
 --run_once("unclutter")
-run_once("xmodmap /home/jsc/.Xmodmap")
 run_once("unagi")
 -- }}}
 
@@ -234,6 +233,40 @@ globalkeys = awful.util.table.join(
   -- {{{ Tag browsing
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
+    awful.key({ modkey,  altkey         }, "h", 
+        function()
+            local s = mouse.screen
+            if client.focus then
+                s = client.focus.screen
+            end
+
+            -- if we are on screen 1 or 3, we shift tags on both screens
+            awful.tag.viewprev(s)
+            if screen.count() > 1 and s == 1 then
+                awful.tag.viewprev(3)
+            end
+            if screen.count() > 1 and s == 3 then
+                awful.tag.viewprev(1)
+            end
+        end
+    ),
+    awful.key({ modkey,  altkey         }, "l",
+        function()
+            local s = mouse.screen
+            if client.focus then
+                s = client.focus.screen
+            end
+
+            -- if we are on screen 1 or 3, we shift tags on both screens
+            awful.tag.viewnext(s)
+            if screen.count() > 1 and s == 1 then
+                awful.tag.viewnext(3)
+            end
+            if screen.count() > 1 and s == 3 then
+                awful.tag.viewnext(1)
+            end
+        end
+    ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
   -- }}}
 
@@ -264,12 +297,14 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus left       (mod + h)
     awful.key({ modkey }, "h",
         function()
-            if awful.client.getmaster() == awful.client.next(0) and
-                awful.client.focus.history.get(client.focus.screen, 1) and
-                awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
-                    awful.client.focus.history.previous()
-            else
-                awful.client.focus.global_bydirection("left")
+            if client.focus then
+                if awful.client.getmaster() == awful.client.next(0) and
+                    awful.client.focus.history.get(client.focus.screen, 1) and
+                    awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
+                        awful.client.focus.history.previous()
+                else
+                    awful.client.focus.global_bydirection("left")
+                end
             end
             if client.focus then client.focus:raise() end
         end),
@@ -277,12 +312,14 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus right      (mod + l)
     awful.key({ modkey }, "l",
         function()
-            if awful.client.getmaster() == awful.client.next(0) and
-                awful.client.focus.history.get(client.focus.screen, 1) and
-                awful.layout.get(client.focus.screen) == awful.layout.suit.tile then
-                    awful.client.focus.history.previous()
-            else
-                awful.client.focus.global_bydirection("right")
+            if client.focus then
+                if awful.client.getmaster() == awful.client.next(0) and
+                    awful.client.focus.history.get(client.focus.screen, 1) and
+                    awful.layout.get(client.focus.screen) == awful.layout.suit.tile then
+                        awful.client.focus.history.previous()
+                else
+                    awful.client.focus.global_bydirection("right")
+                end
             end
             if client.focus then client.focus:raise() end
         end),
@@ -290,11 +327,13 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus up         (mod + k)
     awful.key({ modkey }, "k",
         function()
-            if awful.client.getmaster() == awful.client.next(0) and
-                awful.client.focus.history.get(client.focus.screen, 1) then
-                awful.client.focus.history.previous()
-            else
-                awful.client.focus.bydirection("up")
+            if client.focus then
+                if awful.client.getmaster() == awful.client.next(0) and
+                    awful.client.focus.history.get(client.focus.screen, 1) then
+                    awful.client.focus.history.previous()
+                else
+                    awful.client.focus.bydirection("up")
+                end
             end
             if client.focus then client.focus:raise() end
         end),
@@ -302,11 +341,13 @@ globalkeys = awful.util.table.join(
     -- {{{ Focus down       (mod + j)
     awful.key({ modkey }, "j",
         function()
-            if awful.client.getmaster() == awful.client.next(0) and
-                awful.client.focus.history.get(client.focus.screen, 1) then
-                awful.client.focus.history.previous()
-            else
-                awful.client.focus.bydirection("down")
+            if client.focus then
+                if awful.client.getmaster() == awful.client.next(0) and
+                    awful.client.focus.history.get(client.focus.screen, 1) then
+                    awful.client.focus.history.previous()
+                else
+                    awful.client.focus.bydirection("down")
+                end
             end
             if client.focus then client.focus:raise() end
         end),
@@ -542,7 +583,7 @@ clientkeys = awful.util.table.join(
         awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
         awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
         awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
-        awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
+        --awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
         awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
         awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
         awful.key({ modkey,           }, "n",
