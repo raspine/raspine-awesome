@@ -28,3 +28,4 @@ git module lain:
       - "*.lua" # import root files
       - widgets
       - util
+      - layout
