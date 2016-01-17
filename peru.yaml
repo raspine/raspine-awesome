@@ -1,6 +1,8 @@
 imports:
     material-theme: themes/material
     holo-theme: themes
+    vicious: vicious
+    lain: lain
 
 git module material-theme:
     url: https://github.com/raspine/awesome-material-theme
@@ -12,3 +14,17 @@ git module holo-theme:
     reup: master
     rev: 328f604fd29823fcfe9ffca865585682a310e835
     pick: holo
+
+git module vicious:
+    url: http://git.sysphere.org/vicious
+    reup: master
+    rev: 211a2bfcf541b7821bd06fc97ba6e3c9ee8b6d94
+
+git module lain:
+    url: https://github.com/copycat-killer/lain.git
+    reup: master
+    rev: 42070bba6e69b17cf6db4eae3456ff65a159924b
+    pick:
+      - "*.lua" # import root files
+      - widgets
+      - util

@@ -13,6 +13,8 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
+local vicious = require("vicious")
+local lain = require("lain")
 -- }}}
 
 -- {{{ Error handling
@@ -62,7 +64,8 @@ beautiful.init(awful.util.getdir("config") .. "/themes/material/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 --terminal = "xterm -ls -xrm 'XTerm*selectToClipboard: true'"
-terminal = "gnome-terminal"
+terminal = "xterm -ls -xrm 'XTerm*selectToClipboard: true'"
+--terminal = "gnome-terminal"
 editor = os.getenv("EDITOR") or "gvim" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -125,8 +128,21 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- }}}
 
 -- {{{ Wibox
+local markup = lain.util.markup
+blue   = "#80CCE6"
+space3 = markup.font("Tamsyn 3", " ")
+space2 = markup.font("Tamsyn 2", " ")
+
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
+
+--{{{ CPU
+-- Initialize widget
+cpuwidget = wibox.widget.textbox()
+-- Register widget
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1%")-- Initialize widget
+
+--}}}
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -207,6 +223,7 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(cpuwidget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
@@ -553,10 +570,10 @@ globalkeys = awful.util.table.join(
     --}}}
 
     --{{{ User programs
-    awful.key({ altkey, }, "c", function () awful.util.spawn("chromium") end),
-    awful.key({ altkey, }, "f", function () awful.util.spawn("firefox") end),
-    awful.key({ altkey, }, "v", function () awful.util.spawn("gnome-terminal -e vifm") end),
-    awful.key({ altkey, }, "g", function () awful.util.spawn("xterm -e gvim") end),
+    awful.key({ modkey, }, "c", function () awful.util.spawn("chromium") end),
+    awful.key({ modkey, }, "f", function () awful.util.spawn("firefox") end),
+    awful.key({ modkey, }, "v", function () awful.util.spawn("xterm -e vifm") end),
+    awful.key({ modkey, }, "g", function () awful.util.spawn("gvim") end),
     --}}}
 
     -- {{{ Prompt
