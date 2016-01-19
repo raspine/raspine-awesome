@@ -3,6 +3,7 @@ imports:
     holo-theme: themes
     vicious: vicious
     lain: lain
+    blingbling: blingbling
 
 git module material-theme:
     url: https://github.com/raspine/awesome-material-theme
@@ -29,3 +30,8 @@ git module lain:
       - widgets
       - util
       - layout
+
+git module blingbling:
+     url: https://github.com/cedlemo/blingbling.git
+     reup: master
+     rev: 10e1ea09629fba49f9a4622b812f2613fe0eadff

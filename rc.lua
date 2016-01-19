@@ -14,7 +14,6 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local vicious = require("vicious")
-local lain = require("lain")
 -- }}}
 
 -- {{{ Error handling
@@ -128,24 +127,38 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- }}}
 
 -- {{{ Wibox
-local markup = lain.util.markup
-blue   = "#80CCE6"
-space3 = markup.font("Tamsyn 3", " ")
-space2 = markup.font("Tamsyn 2", " ")
-
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
 
+--{{{ Volume
+ -- }}}
+ 
 --{{{ CPU
 -- Initialize widget
+local widget_bg = "#455a64"
+local widget_fg = "#cfd8dc"
 local cpuwidget_text = wibox.widget.textbox()
-cpuwidget_text:set_markup( '<span color="black">Sacrebleu, I have seen a ghost!</span> ')
 local cpuwidget = wibox.widget.background()
 cpuwidget:set_widget(cpuwidget_text)
-cpuwidget:set_bg("#455a64")
+cpuwidget:set_bg(widget_bg)
+cpuwidget:set_fg(widget_fg)
 -- Register widget
 vicious.register(cpuwidget_text, vicious.widgets.cpu, "cpu: $1%")-- Initialize widget
---}}}
+-- }}}
+
+-- {{{ Memory
+-- -- Initialize widget
+memwidget_text = wibox.widget.textbox()
+memwidget_bg = wibox.widget.background()
+memwidget_bg:set_widget(memwidget_text)
+memwidget_bg:set_bg(widget_bg)
+memwidget_bg:set_fg(widget_fg)
+local memwidget = wibox.layout.margin()
+memwidget:set_widget(memwidget_bg)
+memwidget:set_right(5)
+-- Register widget
+vicious.register(memwidget_text, vicious.widgets.mem, "mem: $1% ($2MB) ", 13)
+-- }}}
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -226,6 +239,7 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(memwidget)
     right_layout:add(cpuwidget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
@@ -616,7 +630,6 @@ clientkeys = awful.util.table.join(
             function (c)
                 c.maximized_horizontal = not c.maximized_horizontal
                 c.maximized_vertical   = not c.maximized_vertical
-                if c.focus then c.focus:raise() end
             end)
     --}}}
 )
