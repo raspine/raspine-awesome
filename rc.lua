@@ -138,10 +138,13 @@ mytextclock = awful.widget.textclock()
 
 --{{{ CPU
 -- Initialize widget
-cpuwidget = wibox.widget.textbox()
+local cpuwidget_text = wibox.widget.textbox()
+cpuwidget_text:set_markup( '<span color="black">Sacrebleu, I have seen a ghost!</span> ')
+local cpuwidget = wibox.widget.background()
+cpuwidget:set_widget(cpuwidget_text)
+cpuwidget:set_bg("#455a64")
 -- Register widget
-vicious.register(cpuwidget, vicious.widgets.cpu, "$1%")-- Initialize widget
-
+vicious.register(cpuwidget_text, vicious.widgets.cpu, "cpu: $1%")-- Initialize widget
 --}}}
 
 -- Create a wibox for each screen and add it
@@ -613,6 +616,7 @@ clientkeys = awful.util.table.join(
             function (c)
                 c.maximized_horizontal = not c.maximized_horizontal
                 c.maximized_vertical   = not c.maximized_vertical
+                if c.focus then c.focus:raise() end
             end)
     --}}}
 )
