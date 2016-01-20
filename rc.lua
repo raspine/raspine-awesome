@@ -135,13 +135,12 @@ mytextclock = awful.widget.textclock()
  
 --{{{ CPU
 -- Initialize widget
-local widget_bg = "#455a64"
-local widget_fg = "#cfd8dc"
+local widget_margin = 3
 local cpuwidget_text = wibox.widget.textbox()
 local cpuwidget = wibox.widget.background()
 cpuwidget:set_widget(cpuwidget_text)
-cpuwidget:set_bg(widget_bg)
-cpuwidget:set_fg(widget_fg)
+cpuwidget:set_bg(beautiful.widget_bg)
+cpuwidget:set_fg(beautiful.widget_fg)
 -- Register widget
 vicious.register(cpuwidget_text, vicious.widgets.cpu, "cpu: $1%")-- Initialize widget
 -- }}}
@@ -151,16 +150,50 @@ vicious.register(cpuwidget_text, vicious.widgets.cpu, "cpu: $1%")-- Initialize w
 memwidget_text = wibox.widget.textbox()
 memwidget_bg = wibox.widget.background()
 memwidget_bg:set_widget(memwidget_text)
-memwidget_bg:set_bg(widget_bg)
-memwidget_bg:set_fg(widget_fg)
+memwidget_bg:set_bg(beautiful.widget_bg)
+memwidget_bg:set_fg(beautiful.widget_fg)
 local memwidget = wibox.layout.margin()
 memwidget:set_widget(memwidget_bg)
-memwidget:set_right(5)
+memwidget:set_right(widget_margin)
+--memwidget:set_left(5)
 -- Register widget
 vicious.register(memwidget_text, vicious.widgets.mem, "mem: $1% ($2MB) ", 13)
 -- }}}
 
---{{{ Tast warrior
+-- {{{ Net
+-- -- Initialize widget
+
+netup_icon = wibox.widget.imagebox()
+netup_icon:set_image(beautiful.netup_icon)
+netup_bg = wibox.widget.background()
+netup_bg:set_widget(netup_icon)
+netup_bg:set_bg(beautiful.widget_bg)
+local netup_arrow = wibox.layout.margin()
+netup_arrow:set_widget(netup_bg)
+netup_arrow:set_left(widget_margin)
+
+netwidget_text = wibox.widget.textbox()
+netwidget_bg = wibox.widget.background()
+netwidget_bg:set_widget(netwidget_text)
+netwidget_bg:set_bg(beautiful.widget_bg)
+netwidget_bg:set_fg(beautiful.widget_fg)
+local netwidget = wibox.layout.margin()
+netwidget:set_widget(netwidget_bg)
+vicious.register(netwidget_text, vicious.widgets.net, "${enp3s0 up_mb}-${enp3s0 down_mb}", 1)
+
+netdown_icon = wibox.widget.imagebox()
+netdown_icon:set_image(beautiful.netdown_icon)
+netdown_bg = wibox.widget.background()
+netdown_bg:set_widget(netdown_icon)
+netdown_bg:set_bg(beautiful.widget_bg)
+local netdown_arrow = wibox.layout.margin()
+netdown_arrow:set_widget(netdown_bg)
+netdown_arrow:set_right(widget_margin)
+--netdown_arrow:set_color("#ffffff")
+
+-- }}}
+
+--{{{ Task warrior
 task_icon = wibox.widget.imagebox()
 task_icon:set_image("/home/jsc/.config/awesome/icons/taskw.png")
 task_icon:buttons(awful.util.table.join( awful.button({ }, 1, function() awful.util.spawn("gvim -c TW") end)))
@@ -246,6 +279,9 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(task_icon)
+    right_layout:add(netup_arrow)
+    right_layout:add(netwidget)
+    right_layout:add(netdown_arrow)
     right_layout:add(memwidget)
     right_layout:add(cpuwidget)
     right_layout:add(mytextclock)

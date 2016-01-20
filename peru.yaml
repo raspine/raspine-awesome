@@ -7,7 +7,7 @@ imports:
 git module material-theme:
     url: https://github.com/raspine/awesome-material-theme
     reup: master
-    rev: 6e2b60866d563606bf427a23d1d56874331fe410
+    rev: ad9cf75c746fc81351f28f448993305655cf87a8
 
 git module holo-theme:
     url: https://github.com/mikar/awesome-themes
@@ -23,7 +23,7 @@ git module vicious:
 git module lain:
     url: https://github.com/copycat-killer/lain.git
     reup: master
-    rev: 42070bba6e69b17cf6db4eae3456ff65a159924b
+    rev: 27ebd0a30d9634ea403a4c9f3c2139c2498faaea
     pick:
       - "*.lua" # import root files
       - widgets
