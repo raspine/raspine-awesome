@@ -160,6 +160,12 @@ memwidget:set_right(5)
 vicious.register(memwidget_text, vicious.widgets.mem, "mem: $1% ($2MB) ", 13)
 -- }}}
 
+--{{{ Tast warrior
+task_icon = wibox.widget.imagebox()
+task_icon:set_image("/home/jsc/.config/awesome/icons/taskw.png")
+task_icon:buttons(awful.util.table.join( awful.button({ }, 1, function() awful.util.spawn("gvim -c TW") end)))
+--}}}
+
 -- Create a wibox for each screen and add it
 mywibox = {}
 mypromptbox = {}
@@ -239,6 +245,7 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(task_icon)
     right_layout:add(memwidget)
     right_layout:add(cpuwidget)
     right_layout:add(mytextclock)
