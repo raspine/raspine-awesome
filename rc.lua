@@ -199,7 +199,7 @@ task_icon:set_image("/home/jsc/.config/awesome/icons/taskw.png")
 task_icon:buttons(awful.util.table.join( awful.button({ }, 1, function() awful.util.spawn("gvim -c TW") end)))
 --}}}
 
--- Create a wibox for each screen and add it
+--{{{ Create a wibox for each screen and add it
 mywibox = {}
 mypromptbox = {}
 mylayoutbox = {}
@@ -295,6 +295,7 @@ for s = 1, screen.count() do
 
     mywibox[s]:set_widget(layout)
 end
+-- }}}
 -- }}}
 
 -- {{{ Mouse bindings
@@ -522,7 +523,7 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move left       (mod + ctrl + h)
+    -- {{{ Shift left       (mod + ctrl + h)
     awful.key({ modkey, "Control"   }, "h",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile then
@@ -535,7 +536,7 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move right      (mod + ctrl + l)
+    -- {{{ Shift right      (mod + ctrl + l)
     awful.key({ modkey, "Control"   }, "l",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.left then
@@ -548,7 +549,7 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move up         (mod + ctrl + k)
+    -- {{{ Shift up         (mod + ctrl + k)
     awful.key({ modkey, "Control"   }, "k",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.bottom then
@@ -561,7 +562,7 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move down       (mod + ctrl + j)
+    -- {{{ Shift down       (mod + ctrl + j)
     awful.key({ modkey, "Control"   }, "j",
         function ()
             if awful.layout.get(client.focus.screen) ~= awful.layout.suit.tile.top then
