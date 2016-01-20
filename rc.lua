@@ -135,13 +135,12 @@ mytextclock = awful.widget.textclock()
  
 --{{{ CPU
 -- Initialize widget
-local widget_bg = "#455a64"
-local widget_fg = "#cfd8dc"
+local widget_margin = 3
 local cpuwidget_text = wibox.widget.textbox()
 local cpuwidget = wibox.widget.background()
 cpuwidget:set_widget(cpuwidget_text)
-cpuwidget:set_bg(widget_bg)
-cpuwidget:set_fg(widget_fg)
+cpuwidget:set_bg(beautiful.widget_bg)
+cpuwidget:set_fg(beautiful.widget_fg)
 -- Register widget
 vicious.register(cpuwidget_text, vicious.widgets.cpu, "cpu: $1%")-- Initialize widget
 -- }}}
@@ -151,13 +150,41 @@ vicious.register(cpuwidget_text, vicious.widgets.cpu, "cpu: $1%")-- Initialize w
 memwidget_text = wibox.widget.textbox()
 memwidget_bg = wibox.widget.background()
 memwidget_bg:set_widget(memwidget_text)
-memwidget_bg:set_bg(widget_bg)
-memwidget_bg:set_fg(widget_fg)
+memwidget_bg:set_bg(beautiful.widget_bg)
+memwidget_bg:set_fg(beautiful.widget_fg)
 local memwidget = wibox.layout.margin()
 memwidget:set_widget(memwidget_bg)
-memwidget:set_right(5)
+memwidget:set_right(widget_margin)
+--memwidget:set_left(5)
 -- Register widget
 vicious.register(memwidget_text, vicious.widgets.mem, "mem: $1% ($2MB) ", 13)
+-- }}}
+
+-- {{{ Net
+-- -- Initialize widget
+
+netdown_icon = wibox.widget.imagebox()
+netdown_icon:set_image(beautiful.netdown_icon)
+netup_icon = wibox.widget.imagebox()
+netup_icon:set_image(beautiful.netup_icon)
+--netwidget = vicious.widgets.net({
+  --settings = function()
+    --widget:set_markup(markup.font("Tamsyn 1", " ") .. net_now.received .. " - "
+    --.. net_now.sent .. space2)
+  --end,
+  --units = 128
+--})
+--netwidget_text = wibox.widget.textbox()
+--netwidget_bg = wibox.widget.background()
+--netwidget_bg:set_widget(netwidget_text)
+--netwidget_bg:set_bg(beautiful.widget_bg)
+--netwidget_bg:set_fg(beautiful.widget_fg)
+--local netwidget = wibox.layout.margin()
+--netwidget:set_widget(netwidget_bg)
+--netwidget:set_right(widget_margin)
+--netwidget:set_left(widget_margin)
+------ Register widget
+--vicious.register(netwidget_text, vicious.widgets.net, "net: $1 $2 ")
 -- }}}
 
 --{{{ Tast warrior
@@ -246,6 +273,7 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(task_icon)
+    right_layout:add(netdown_icon)
     right_layout:add(memwidget)
     right_layout:add(cpuwidget)
     right_layout:add(mytextclock)
