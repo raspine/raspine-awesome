@@ -163,31 +163,37 @@ vicious.register(memwidget_text, vicious.widgets.mem, "mem: $1% ($2MB) ", 13)
 -- {{{ Net
 -- -- Initialize widget
 
-netdown_icon = wibox.widget.imagebox()
-netdown_icon:set_image(beautiful.netdown_icon)
 netup_icon = wibox.widget.imagebox()
 netup_icon:set_image(beautiful.netup_icon)
---netwidget = vicious.widgets.net({
-  --settings = function()
-    --widget:set_markup(markup.font("Tamsyn 1", " ") .. net_now.received .. " - "
-    --.. net_now.sent .. space2)
-  --end,
-  --units = 128
---})
---netwidget_text = wibox.widget.textbox()
---netwidget_bg = wibox.widget.background()
---netwidget_bg:set_widget(netwidget_text)
---netwidget_bg:set_bg(beautiful.widget_bg)
---netwidget_bg:set_fg(beautiful.widget_fg)
---local netwidget = wibox.layout.margin()
---netwidget:set_widget(netwidget_bg)
---netwidget:set_right(widget_margin)
---netwidget:set_left(widget_margin)
------- Register widget
---vicious.register(netwidget_text, vicious.widgets.net, "net: $1 $2 ")
+netup_bg = wibox.widget.background()
+netup_bg:set_widget(netup_icon)
+netup_bg:set_bg(beautiful.widget_bg)
+local netup_arrow = wibox.layout.margin()
+netup_arrow:set_widget(netup_bg)
+netup_arrow:set_left(widget_margin)
+
+netwidget_text = wibox.widget.textbox()
+netwidget_bg = wibox.widget.background()
+netwidget_bg:set_widget(netwidget_text)
+netwidget_bg:set_bg(beautiful.widget_bg)
+netwidget_bg:set_fg(beautiful.widget_fg)
+local netwidget = wibox.layout.margin()
+netwidget:set_widget(netwidget_bg)
+vicious.register(netwidget_text, vicious.widgets.net, "${enp3s0 up_mb}-${enp3s0 down_mb}", 1)
+
+netdown_icon = wibox.widget.imagebox()
+netdown_icon:set_image(beautiful.netdown_icon)
+netdown_bg = wibox.widget.background()
+netdown_bg:set_widget(netdown_icon)
+netdown_bg:set_bg(beautiful.widget_bg)
+local netdown_arrow = wibox.layout.margin()
+netdown_arrow:set_widget(netdown_bg)
+netdown_arrow:set_right(widget_margin)
+--netdown_arrow:set_color("#ffffff")
+
 -- }}}
 
---{{{ Tast warrior
+--{{{ Task warrior
 task_icon = wibox.widget.imagebox()
 task_icon:set_image("/home/jsc/.config/awesome/icons/taskw.png")
 task_icon:buttons(awful.util.table.join( awful.button({ }, 1, function() awful.util.spawn("gvim -c TW") end)))
@@ -273,7 +279,9 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(task_icon)
-    right_layout:add(netdown_icon)
+    right_layout:add(netup_arrow)
+    right_layout:add(netwidget)
+    right_layout:add(netdown_arrow)
     right_layout:add(memwidget)
     right_layout:add(cpuwidget)
     right_layout:add(mytextclock)
