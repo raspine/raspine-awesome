@@ -359,15 +359,24 @@ globalkeys = awful.util.table.join(
     -- {{{ Test     (mod + t)
     awful.key({ modkey }, "t",
         function()
-            local pos = awful.client.idx(client.focus)
-            if pos then
-                naughty.notify({ 
-                                 border_width = 0,
-                                 bg = beautiful.bg_focus,
-                                 fg = beautiful.fg_focus,
-                                 title = "Result of test",
-                                 text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
-           end
+            awful.client.floating.set(client.focus, true)
+            client.focus.size_hints_honor = false
+            client.focus.border_width = 0
+            client.focus:geometry({ x = 500, y = 30, width = 800, height = 200 })
+            awful.client.movetoscreen(client.focus)
+
+            client.focus:raise()
+            --awful.client.moveresize(0, 0, 0.2, 0.2)
+            --mypop:toggle()
+            --local pos = awful.client.idx(client.focus)
+            --if pos then
+            --naughty.notify({ 
+                             --border_width = 0,
+                             --bg = beautiful.bg_focus,
+                             --fg = beautiful.fg_focus,
+                             --title = "Result of test",
+                             --text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
+           --end
          end),
     -- }}}
 
