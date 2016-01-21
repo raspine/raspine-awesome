@@ -196,7 +196,10 @@ netdown_arrow:set_right(widget_margin)
 --{{{ Task warrior
 task_icon = wibox.widget.imagebox()
 task_icon:set_image("/home/jsc/.config/awesome/icons/taskw.png")
-task_icon:buttons(awful.util.table.join( awful.button({ }, 1, function() awful.util.spawn("gvim -c TW") end)))
+task_icon:buttons(awful.util.table.join( awful.button({ }, 1,
+function()
+    awful.util.spawn("uxterm -e vim -c TW")
+end)))
 --}}}
 
 --{{{ Create a wibox for each screen and add it
@@ -359,23 +362,17 @@ globalkeys = awful.util.table.join(
     -- {{{ Test     (mod + t)
     awful.key({ modkey }, "t",
         function()
-            awful.client.floating.set(client.focus, true)
-            client.focus.size_hints_honor = false
-            client.focus.border_width = 0
-            client.focus:geometry({ x = 500, y = 30, width = 800, height = 200 })
-            awful.client.movetoscreen(client.focus)
 
-            client.focus:raise()
-            --awful.client.moveresize(0, 0, 0.2, 0.2)
-            --mypop:toggle()
             --local pos = awful.client.idx(client.focus)
             --if pos then
-            --naughty.notify({ 
-                             --border_width = 0,
-                             --bg = beautiful.bg_focus,
-                             --fg = beautiful.fg_focus,
-                             --title = "Result of test",
+            local geo = client.focus.geometry(client.focus)
+            naughty.notify({ 
+                             border_width = 0,
+                             bg = beautiful.bg_focus,
+                             fg = beautiful.fg_focus,
+                             title = "Result of test",
                              --text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
+                             text = "x: "..geo.x.." y: "..geo.y.." width: "..geo.width.." height: "..geo.height})--.." num: "..pos.num })
            --end
          end),
     -- }}}
@@ -781,6 +778,17 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
+    { rule = { class = "UXTerm" },
+      properties = {
+          floating = true,
+          border_width = 0,
+          x = 1200,
+          y = 30,
+          width = 573,
+          height = 223,
+          size_hints_honor = true,
+          above = true,
+      }},
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
