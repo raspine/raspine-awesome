@@ -8,6 +8,7 @@ awful.rules = require("awful.rules")
 require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
+local lain = require("lain")
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
@@ -172,14 +173,22 @@ local netup_arrow = wibox.layout.margin()
 netup_arrow:set_widget(netup_bg)
 netup_arrow:set_left(widget_margin)
 
-netwidget_text = wibox.widget.textbox()
+local markup = lain.util.markup
+netwidget_text = lain.widgets.net({
+  settings = function()
+    widget:set_markup(net_now.sent .. " - " .. net_now.received)
+   end,
+  units = 1024
+})
+
+--netwidget_text = wibox.widget.textbox()
 netwidget_bg = wibox.widget.background()
 netwidget_bg:set_widget(netwidget_text)
 netwidget_bg:set_bg(beautiful.widget_bg)
 netwidget_bg:set_fg(beautiful.widget_fg)
 local netwidget = wibox.layout.margin()
 netwidget:set_widget(netwidget_bg)
-vicious.register(netwidget_text, vicious.widgets.net, "${enp3s0 up_mb}-${enp3s0 down_mb}", 1)
+--vicious.register(netwidget_text, vicious.widgets.net, "${enp3s0 up_mb}-${enp3s0 down_mb}", 1)
 
 netdown_icon = wibox.widget.imagebox()
 netdown_icon:set_image(beautiful.netdown_icon)
