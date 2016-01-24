@@ -14,7 +14,10 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local vicious = require("vicious")
+require("puppy.puppy")
 -- }}}
+
+local test_pop = puppy({terminal = "xterm"})
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -198,7 +201,35 @@ task_icon = wibox.widget.imagebox()
 task_icon:set_image("/home/jsc/.config/awesome/icons/taskw.png")
 task_icon:buttons(awful.util.table.join( awful.button({ }, 1,
 function()
-    awful.util.spawn("uxterm -e vim -c TW")
+    --awful.util.spawn("uxterm -e vim -c TW")
+    awful.util.spawn("gvim -name tasks -c TW")
+end)))
+--}}}
+
+--{{{ gmail
+gmail_icon = wibox.widget.imagebox()
+gmail_icon:set_image("/home/jsc/.config/awesome/icons/gmail.png")
+gmail_icon:buttons(awful.util.table.join( awful.button({ }, 1,
+function()
+    awful.util.spawn("vimb --name=gmail -C 'set useragent=Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1|set home-page=www.gmail.com'")
+end)))
+--}}}
+
+--{{{ twitter
+twitter_icon = wibox.widget.imagebox()
+twitter_icon:set_image("/home/jsc/.config/awesome/icons/twitter.png")
+twitter_icon:buttons(awful.util.table.join( awful.button({ }, 1,
+function()
+    awful.util.spawn("vimb --name=twitter -C 'set useragent=Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1|set home-page=www.twitter.com'")
+end)))
+--}}}
+
+--{{{ swedroid
+swedroid_icon = wibox.widget.imagebox()
+swedroid_icon:set_image("/home/jsc/.config/awesome/icons/swedroid.png")
+swedroid_icon:buttons(awful.util.table.join( awful.button({ }, 1,
+function()
+    awful.util.spawn("vimb --name=twitter -C 'set useragent=Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1|set home-page=www.swedroid.com'")
 end)))
 --}}}
 
@@ -281,6 +312,9 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(swedroid_icon)
+    right_layout:add(twitter_icon)
+    right_layout:add(gmail_icon)
     right_layout:add(task_icon)
     right_layout:add(netup_arrow)
     right_layout:add(netwidget)
@@ -362,17 +396,17 @@ globalkeys = awful.util.table.join(
     -- {{{ Test     (mod + t)
     awful.key({ modkey }, "t",
         function()
-
+            test_pop:toggle()
             --local pos = awful.client.idx(client.focus)
             --if pos then
-            local geo = client.focus.geometry(client.focus)
-            naughty.notify({ 
-                             border_width = 0,
-                             bg = beautiful.bg_focus,
-                             fg = beautiful.fg_focus,
-                             title = "Result of test",
-                             --text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
-                             text = "x: "..geo.x.." y: "..geo.y.." width: "..geo.width.." height: "..geo.height})--.." num: "..pos.num })
+            --local geo = client.focus.geometry(client.focus)
+            --naughty.notify({ 
+                             --border_width = 0,
+                             --bg = beautiful.bg_focus,
+                             --fg = beautiful.fg_focus,
+                             --title = "Result of test",
+                             ----text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
+                             --text = "x: "..geo.x.." y: "..geo.y.." width: "..geo.width.." height: "..geo.height})--.." num: "..pos.num })
            --end
          end),
     -- }}}
@@ -778,15 +812,49 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
-    { rule = { class = "UXTerm" },
+    { rule = { instance = "tasks" },
       properties = {
           floating = true,
           border_width = 0,
           x = 1200,
           y = 30,
-          width = 573,
-          height = 223,
-          size_hints_honor = true,
+          width = 480,
+          height = 480,
+          size_hints_honor = false,
+          opacity = 0.5,
+          above = true,
+      }},
+    { rule = { instance = "gmail" },
+      properties = {
+          floating = true,
+          border_width = 0,
+          x = 1200,
+          y = 30,
+          width = 480,
+          height = 480,
+          size_hints_honor = false,
+          above = true,
+      }},
+    { rule = { instance = "twitter" },
+      properties = {
+          floating = true,
+          border_width = 0,
+          x = 1200,
+          y = 30,
+          width = 480,
+          height = 480,
+          size_hints_honor = false,
+          above = true,
+      }},
+    { rule = { instance = "swedroid" },
+      properties = {
+          floating = true,
+          border_width = 0,
+          x = 1200,
+          y = 30,
+          width = 480,
+          height = 480,
+          size_hints_honor = false,
           above = true,
       }},
     -- Set Firefox to always map on tags number 2 of screen 1.
