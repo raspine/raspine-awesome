@@ -8,6 +8,8 @@
 -- Use:
 
 
+local naughty = require("naughty")
+local beautiful = require("beautiful")
 
 local setmetatable = setmetatable
 local string = string
@@ -24,7 +26,7 @@ local PuppyClient = {}
 
 -- Display
 function PuppyClient:display()
-   -- First, we locate the terminal
+   -- First, we locate the app
    local client = nil
    local i = 0
    for c in awful.client.iterate(function (c)
@@ -47,13 +49,21 @@ function PuppyClient:display()
    end
 
    if not client and not self.visible then
-      -- The terminal is not here yet but we don't want it yet. Just do nothing.
+      -- The app is not here yet but we don't want it yet. Just do nothing.
       return
    end
 
    if not client then
       -- The client does not exist, we spawn it
-      awful.util.spawn(self.terminal .. " " .. string.format(self.argname, self.name),
+      
+    --naughty.notify({ 
+		     --border_width = 0,
+		     --bg = beautiful.bg_focus,
+		     --fg = beautiful.fg_focus,
+		     --title = "Result of test",
+		     ----text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
+		     --text = "x: "..geo.x.." y: "..geo.y.." width: "..geo.width.." height: "..geo.height})--.." num: "..pos.num })
+      awful.util.spawn(self.app .. " " .. string.format(self.argname, self.name) .. " " ..self.command,
 		       false, self.screen)
       return
    end
@@ -76,7 +86,7 @@ function PuppyClient:display()
    client.border_width = 0
    client.size_hints_honor = false
    --client:geometry({ x = x, y = y, width = width, height = height })
-   client:geometry({ x = 1200, y = 30, width = 400, height = 480 })
+   client:geometry({ x = 1200, y = 30, width = 480, height = 480 })
 
    -- Sticky and on top
    client.ontop = true
@@ -103,8 +113,9 @@ function PuppyClient:new(config)
    -- The "console" object is just its configuration.
 
    -- The application to be invoked is:
-   --   config.terminal .. " " .. string.format(config.argname, config.name)
-   config.terminal = config.terminal or "xterm" -- application to spawn
+   --   config.app .. " " .. string.format(config.argname, config.name)
+   config.app = config.app or "xterm" -- application to spawn
+   config.command = config.command or "" -- command to run
    config.name     = config.name     or "PuppyClientNeedsUniqueName" -- window name
    config.argname  = config.argname  or "-name %s"     -- how to specify window name
 

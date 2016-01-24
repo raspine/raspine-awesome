@@ -17,7 +17,12 @@ local vicious = require("vicious")
 require("puppy.puppy")
 -- }}}
 
-local test_pop = puppy({terminal = "xterm"})
+local test_pop = puppy({
+                        app = "gvim",
+                        command = "-c TW",
+                        name = "taskw",
+                        })
+                            
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
