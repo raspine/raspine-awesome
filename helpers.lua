@@ -1,8 +1,4 @@
 local awful = require("awful")
-local naughty = require("naughty")
-local beautiful = require("beautiful")
-
-terminal_cwd = "xterm -ls -xrm 'XTerm*selectToClipboard: true' -cd"
 
 -- Get the cwd of the process pid
 function process_get_cwd(pid)
@@ -34,7 +30,10 @@ function open_terminal_same_cwd(client)
 	end
 
 	local pid = client.pid
-	pid = string.sub(pid, 0, string.find(pid, ".", 1, true) - 1)
+  local pos = string.find(pid, ".", 1, true)
+  if pos then
+    pid = string.sub(pid, 0, pos - 1)
+  end
 	local subpid = process_get_subproc_pid(pid)
 
 	if subpid then
@@ -42,12 +41,6 @@ function open_terminal_same_cwd(client)
 	end
 
 	local cwd = process_get_cwd(pid)
-    --naughty.notify({ 
-		     --border_width = 0,
-		     --bg = beautiful.bg_focus,
-		     --fg = beautiful.fg_focus,
-		     --title = "Result of test",
-		     --text = "pid: ".. pid .. " cwd: " .. cwd})
-	awful.util.spawn_with_shell("urxvt -cd " .. cwd)
+	awful.util.spawn_with_shell("xterm -e 'cd " .. cwd .. " && /bin/bash'")
 end
 
