@@ -14,6 +14,7 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local vicious = require("vicious")
+require("helpers")
 require("puppy.puppy")
 -- }}}
 
@@ -59,7 +60,8 @@ function run_once(cmd)
   awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
 end
 
---run_once("urxvtd")
+run_once("urxvtd")
+run_once("VBoxClient-all")
 --run_once("unclutter")
 run_once("unagi")
 -- }}}
@@ -220,6 +222,15 @@ function()
 end)))
 --}}}
 
+--{{{ outlook
+outlook_icon = wibox.widget.imagebox()
+outlook_icon:set_image("/home/jsc/.config/awesome/icons/outlook_mail.png")
+outlook_icon:buttons(awful.util.table.join( awful.button({ }, 1,
+function()
+    awful.util.spawn("vimb --name=gmail -C 'set useragent=Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1|set home-page=www.outlook.office.com'")
+end)))
+--}}}
+
 --{{{ twitter
 twitter_icon = wibox.widget.imagebox()
 twitter_icon:set_image("/home/jsc/.config/awesome/icons/twitter.png")
@@ -319,6 +330,7 @@ for s = 1, screen.count() do
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(swedroid_icon)
     right_layout:add(twitter_icon)
+    right_layout:add(outlook_icon)
     right_layout:add(gmail_icon)
     right_layout:add(task_icon)
     right_layout:add(netup_arrow)
@@ -663,7 +675,7 @@ globalkeys = awful.util.table.join(
 
     --{{{ Program control
     -- {{{ Standard program
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey, "Control" }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -703,6 +715,7 @@ globalkeys = awful.util.table.join(
 
 clientkeys = awful.util.table.join(
   --{{{ Client control
+        awful.key({ modkey, }, "Return", function () open_terminal_same_cwd(c) end),
         awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
         awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
         awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
@@ -852,6 +865,17 @@ awful.rules.rules = {
           above = true,
       }},
     { rule = { instance = "swedroid" },
+      properties = {
+          floating = true,
+          border_width = 0,
+          x = 1200,
+          y = 30,
+          width = 480,
+          height = 480,
+          size_hints_honor = false,
+          above = true,
+      }},
+    { rule = { instance = "gajim" },
       properties = {
           floating = true,
           border_width = 0,
