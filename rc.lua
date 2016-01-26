@@ -222,15 +222,6 @@ function()
 end)))
 --}}}
 
---{{{ outlook
-outlook_icon = wibox.widget.imagebox()
-outlook_icon:set_image("/home/jsc/.config/awesome/icons/outlook_mail.png")
-outlook_icon:buttons(awful.util.table.join( awful.button({ }, 1,
-function()
-    awful.util.spawn("vimb --name=gmail -C 'set useragent=Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1|set home-page=www.outlook.office.com'")
-end)))
---}}}
-
 --{{{ twitter
 twitter_icon = wibox.widget.imagebox()
 twitter_icon:set_image("/home/jsc/.config/awesome/icons/twitter.png")
@@ -330,7 +321,6 @@ for s = 1, screen.count() do
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(swedroid_icon)
     right_layout:add(twitter_icon)
-    right_layout:add(outlook_icon)
     right_layout:add(gmail_icon)
     right_layout:add(task_icon)
     right_layout:add(netup_arrow)
@@ -413,7 +403,7 @@ globalkeys = awful.util.table.join(
     -- {{{ Test     (mod + t)
     awful.key({ modkey }, "t",
         function()
-            test_pop:toggle()
+            test_pop:save()
             --local pos = awful.client.idx(client.focus)
             --if pos then
             --local geo = client.focus.geometry(client.focus)
@@ -841,6 +831,7 @@ awful.rules.rules = {
           size_hints_honor = false,
           opacity = 0.5,
           above = true,
+          skip_taskbar = true,
       }},
     { rule = { instance = "gmail" },
       properties = {
@@ -852,6 +843,7 @@ awful.rules.rules = {
           height = 480,
           size_hints_honor = false,
           above = true,
+          skip_taskbar = true,
       }},
     { rule = { instance = "twitter" },
       properties = {
@@ -863,6 +855,7 @@ awful.rules.rules = {
           height = 480,
           size_hints_honor = false,
           above = true,
+          skip_taskbar = true,
       }},
     { rule = { instance = "swedroid" },
       properties = {
@@ -874,6 +867,7 @@ awful.rules.rules = {
           height = 480,
           size_hints_honor = false,
           above = true,
+          skip_taskbar = true,
       }},
     { rule = { instance = "gajim" },
       properties = {
@@ -885,6 +879,7 @@ awful.rules.rules = {
           height = 480,
           size_hints_honor = false,
           above = true,
+          skip_taskbar = true,
       }},
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
