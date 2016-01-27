@@ -11,12 +11,6 @@
 local naughty = require("naughty")
 local beautiful = require("beautiful")
 local awful  = require("awful")
-local io = io
-local table = table
-local ipairs = ipairs
-local pairs = pairs
-local type = type
-local tostring = tostring
 --local table = require("puppy.tablefile")
 --}}}
 
@@ -28,7 +22,13 @@ local capi   =
   mouse = mouse,
   screen = screen,
   client = client,
-  timer = timer
+  timer = timer,
+  io = io,
+  table = table,
+  ipairs = ipairs,
+  pairs = pairs,
+  type = type,
+  tostring = tostring
 }
 local PuppyScreen = {}
 --}}}
@@ -45,69 +45,69 @@ do
    end
 
    --// The Save Function
-   function table.save(  tbl,filename )
+   function capi.table.save(  tbl,filename )
       local charS,charE = "   ","\n"
-      local file,err = io.open( filename, "wb" )
+      local file,err = capi.io.open( filename, "wb" )
       if err then return err end
 
       -- initiate variables for save procedure
       local tables,lookup = { tbl },{ [tbl] = 1 }
       file:write( "return {"..charE )
 
-      for idx,t in ipairs( tables ) do
+      for idx,t in capi.ipairs( tables ) do
          file:write( "-- Table: {"..idx.."}"..charE )
          file:write( "{"..charE )
          local thandled = {}
 
-         for i,v in ipairs( t ) do
+         for i,v in capi.ipairs( t ) do
             thandled[i] = true
-            local stype = type( v )
+            local stype = capi.type( v )
             -- only handle value
             if stype == "table" then
                if not lookup[v] then
-                  table.insert( tables, v )
+                  capi.table.insert( tables, v )
                   lookup[v] = #tables
                end
                file:write( charS.."{"..lookup[v].."},"..charE )
             elseif stype == "string" then
                file:write(  charS..exportstring( v )..","..charE )
             elseif stype == "number" then
-               file:write(  charS..tostring( v )..","..charE )
+               file:write(  charS..capi.tostring( v )..","..charE )
             end
          end
 
-         for i,v in pairs( t ) do
+         for i,v in capi.pairs( t ) do
             -- escape handled values
             if (not thandled[i]) then
             
                local str = ""
-               local stype = type( i )
+               local stype = capi.type( i )
                -- handle index
                if stype == "table" then
                   if not lookup[i] then
-                     table.insert( tables,i )
+                     capi.table.insert( tables,i )
                      lookup[i] = #tables
                   end
                   str = charS.."[{"..lookup[i].."}]="
                elseif stype == "string" then
                   str = charS.."["..exportstring( i ).."]="
                elseif stype == "number" then
-                  str = charS.."["..tostring( i ).."]="
+                  str = charS.."["..capi.tostring( i ).."]="
                end
             
                if str ~= "" then
-                  stype = type( v )
+                  stype = capi.type( v )
                   -- handle value
                   if stype == "table" then
                      if not lookup[v] then
-                        table.insert( tables,v )
+                        capi.table.insert( tables,v )
                         lookup[v] = #tables
                      end
                      file:write( str.."{"..lookup[v].."},"..charE )
                   elseif stype == "string" then
                      file:write( str..exportstring( v )..","..charE )
                   elseif stype == "number" then
-                     file:write( str..tostring( v )..","..charE )
+                     file:write( str..capi.tostring( v )..","..charE )
                   end
                end
             end
@@ -119,22 +119,22 @@ do
    end
    
    --// The Load Function
-   function table.load( sfile )
+   function capi.table.load( sfile )
       local ftables,err = loadfile( sfile )
       if err then return _,err end
       local tables = ftables()
       for idx = 1,#tables do
          local tolinki = {}
-         for i,v in pairs( tables[idx] ) do
-            if type( v ) == "table" then
+         for i,v in capi.pairs( tables[idx] ) do
+            if capi.type( v ) == "table" then
                tables[idx][i] = tables[v[1]]
             end
-            if type( i ) == "table" and tables[i[1]] then
-               table.insert( tolinki,{ i,tables[i[1]] } )
+            if capi.type( i ) == "table" and tables[i[1]] then
+               capi.table.insert( tolinki,{ i,tables[i[1]] } )
             end
          end
          -- link indices
-         for _,v in ipairs( tolinki ) do
+         for _,v in capi.ipairs( tolinki ) do
             tables[idx][v[2]],tables[idx][v[1]] =  tables[idx][v[1]],nil
          end
       end
@@ -284,7 +284,7 @@ end
   --self:display()
 --end
 
-function PuppyScreen:toggle()
+function PuppyScreen:toggle(name)
   for c in awful.client.iterate(function (c)
     -- only save floating clients
     -- TODO: ..and clients handled by puppy
@@ -301,19 +301,28 @@ function PuppyScreen:toggle()
  end
 end
 
-function PuppyScreen:save()
+function process_get_cmd(pid)
+  local fp = capi.io.popen("cat /proc/" .. pid .. "/cmdline")
+  return fp:read()
+end
 
-  local puppyScreen = {}
-  local puppyClient = {}
+function PuppyScreen:save(name, screen)
+  screen = screen or capi.mouse.screen
+  local puppyClients = {}
   for c in awful.client.iterate(function (c)
-    -- only save floating clients
-    return awful.client.floating.get(c)
+    -- only save visible floating clients
+    return awful.client.floating.get(c) and not c.hidden
   end,
-  nil, self.screen) do
-    puppyClient[c.instance] = { geometry=c:geometry() }
+  nil, screen) do
+    local pid = c.pid
+    local pos = string.find(pid, ".", 1, true)
+    if pos then
+      pid = string.sub(pid, 0, pos - 1)
+    end
+    puppyClients[c.instance] = { geometry=c:geometry(), cmdline=process_get_cmd(pid) }
   end
   confdir = awful.util.getdir("config")
-  table.save(puppyClient, confdir .. "/puppy-conf")
+  capi.table.save(puppyClients, confdir .. "/puppy-conf-" .. name)
 end
 
 setmetatable(_M, { __call = function(_, ...) return PuppyScreen:new(...) end })

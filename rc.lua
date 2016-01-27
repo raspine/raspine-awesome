@@ -402,7 +402,7 @@ globalkeys = awful.util.table.join(
     -- {{{ Test     (mod + t)
     awful.key({ modkey }, "t",
         function()
-            test_pop:save()
+            test_pop:save("test")
             --local pos = awful.client.idx(client.focus)
             --if pos then
             --local geo = client.focus.geometry(client.focus)
@@ -417,7 +417,7 @@ globalkeys = awful.util.table.join(
          end),
     awful.key({ modkey, "Ctrl" }, "t",
         function()
-            test_pop:toggle()
+            test_pop:toggle("test")
          end),
     -- }}}
 
