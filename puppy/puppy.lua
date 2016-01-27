@@ -279,9 +279,26 @@ function PuppyScreen:new(config)
 end
 
 -- Toggle the console
+--function PuppyScreen:toggle()
+  --self.visible = not self.visible
+  --self:display()
+--end
+
 function PuppyScreen:toggle()
-  self.visible = not self.visible
-  self:display()
+  for c in awful.client.iterate(function (c)
+    -- only save floating clients
+    -- TODO: ..and clients handled by puppy
+    return awful.client.floating.get(c)
+  end,
+  nil, self.screen) do
+    --c.visible = not c.visible
+    if c.hidden then
+      c.hidden = false
+      c:raise()
+    else
+       c.hidden = true
+  end
+ end
 end
 
 function PuppyScreen:save()
@@ -295,7 +312,8 @@ function PuppyScreen:save()
   nil, self.screen) do
     puppyClient[c.instance] = { geometry=c:geometry() }
   end
-  table.save(puppyClient, "test_table.txt")
+  confdir = awful.util.getdir("config")
+  table.save(puppyClient, confdir .. "/puppy-conf")
 end
 
 setmetatable(_M, { __call = function(_, ...) return PuppyScreen:new(...) end })

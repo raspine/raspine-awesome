@@ -415,6 +415,10 @@ globalkeys = awful.util.table.join(
                              --text = "x: "..geo.x.." y: "..geo.y.." width: "..geo.width.." height: "..geo.height})--.." num: "..pos.num })
            --end
          end),
+    awful.key({ modkey, "Ctrl" }, "t",
+        function()
+            test_pop:toggle()
+         end),
     -- }}}
 
     -- {{{ Client focus
@@ -677,10 +681,10 @@ globalkeys = awful.util.table.join(
     --}}}
 
     --{{{ User programs
-    awful.key({ modkey, }, "c", function () awful.util.spawn("chromium") end),
-    awful.key({ modkey, }, "f", function () awful.util.spawn("firefox") end),
-    awful.key({ modkey, }, "v", function () awful.util.spawn("xterm -e vifm") end),
-    awful.key({ modkey, }, "g", function () awful.util.spawn("gvim") end),
+    awful.key({ modkey, "Ctrl" }, "c", function () awful.util.spawn("chromium") end),
+    awful.key({ modkey, "Ctrl" }, "f", function () awful.util.spawn("firefox") end),
+    awful.key({ modkey, "Ctrl" }, "v", function () awful.util.spawn("xterm -e vifm") end),
+    awful.key({ modkey, "Ctrl" }, "g", function () awful.util.spawn("gvim") end),
     --}}}
 
     -- {{{ Prompt
