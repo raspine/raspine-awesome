@@ -61,7 +61,6 @@ function run_once(cmd)
 end
 
 run_once("urxvtd")
-run_once("VBoxClient-all")
 --run_once("unclutter")
 run_once("unagi")
 -- }}}
