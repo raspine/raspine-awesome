@@ -419,6 +419,10 @@ globalkeys = awful.util.table.join(
         function()
             test_pop:toggle("test")
          end),
+    awful.key({ modkey, "Shift" }, "t",
+        function()
+            test_pop:launch("test")
+         end),
     -- }}}
 
     -- {{{ Client focus

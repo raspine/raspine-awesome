@@ -24,6 +24,7 @@ local capi   =
   client = client,
   timer = timer,
   io = io,
+  loadfile = loadfile,
   table = table,
   ipairs = ipairs,
   pairs = pairs,
@@ -120,7 +121,7 @@ do
    
    --// The Load Function
    function capi.table.load( sfile )
-      local ftables,err = loadfile( sfile )
+      local ftables,err = capi.loadfile( sfile )
       if err then return _,err end
       local tables = ftables()
       for idx = 1,#tables do
@@ -309,6 +310,7 @@ end
 function PuppyScreen:save(name, screen)
   screen = screen or capi.mouse.screen
   local puppyClients = {}
+  --local i = 0
   for c in awful.client.iterate(function (c)
     -- only save visible floating clients
     return awful.client.floating.get(c) and not c.hidden
@@ -319,10 +321,30 @@ function PuppyScreen:save(name, screen)
     if pos then
       pid = string.sub(pid, 0, pos - 1)
     end
-    puppyClients[c.instance] = { geometry=c:geometry(), cmdline=process_get_cmd(pid) }
+    puppyClients[c.instance] = {
+                  cmdline=process_get_cmd(pid),
+                  height=c:geometry().height,
+                  width=c:geometry().width,
+                  x=c:geometry().x,
+                  y=c:geometry().y
+                }
+    --i = i + 1
   end
   confdir = awful.util.getdir("config")
   capi.table.save(puppyClients, confdir .. "/puppy-conf-" .. name)
+end
+
+function PuppyScreen:launch(name, screen)
+  confdir = awful.util.getdir("config")
+  local puppyClients = capi.table.load(confdir .. "/puppy-conf-" .. name)
+  for k, v in capi.pairs(puppyClients) do
+    naughty.notify({ 
+      border_width = 0,
+      bg = beautiful.bg_focus,
+      fg = beautiful.fg_focus,
+      title = "Result of test",
+      text = "instance: " .. k .. " height: " .. v["height"] .. " cmdline: " .. v["cmdline"]})
+  end
 end
 
 setmetatable(_M, { __call = function(_, ...) return PuppyScreen:new(...) end })
