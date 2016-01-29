@@ -147,6 +147,11 @@ end
 -- Display
 function PuppyScreen:display()
   -- First, we locate the app
+    naughty.notify({ 
+      border_width = 0,
+      bg = beautiful.bg_focus,
+      fg = beautiful.fg_focus,
+      title = "Puppy display"})
   local client = nil
   local i = 0
   for c in awful.client.iterate(function (c)
@@ -269,13 +274,18 @@ function PuppyScreen:new(config)
   end)
 
   -- "Reattach" currently running PuppyScreen. This is in case awesome is restarted.
-  local reattach = capi.timer { timeout = 0 }
-  reattach:connect_signal("timeout",
-  function()
-    reattach:stop()
-    console:display()
-  end)
-  reattach:start()
+  --local reattach = capi.timer { timeout = 0 }
+  --reattach:connect_signal("timeout",
+  --function()
+    --reattach:stop()
+    --console:display()
+    --naughty.notify({ 
+      --border_width = 0,
+      --bg = beautiful.bg_focus,
+      --fg = beautiful.fg_focus,
+      --title = "Reattache = true"})
+  --end)
+  --reattach:start()
   return console
 end
 
@@ -303,7 +313,7 @@ function PuppyScreen:toggle(name)
 end
 
 function process_get_cmd(pid)
-  local fp = capi.io.popen("cat /proc/" .. pid .. "/cmdline")
+  local fp = capi.io.popen("xargs -0 < /proc/" .. pid .. "/cmdline")
   return fp:read()
 end
 
@@ -338,12 +348,7 @@ function PuppyScreen:launch(name, screen)
   confdir = awful.util.getdir("config")
   local puppyClients = capi.table.load(confdir .. "/puppy-conf-" .. name)
   for k, v in capi.pairs(puppyClients) do
-    naughty.notify({ 
-      border_width = 0,
-      bg = beautiful.bg_focus,
-      fg = beautiful.fg_focus,
-      title = "Result of test",
-      text = "instance: " .. k .. " height: " .. v["height"] .. " cmdline: " .. v["cmdline"]})
+    awful.util.spawn(v["cmdline"])
   end
 end
 
