@@ -18,11 +18,7 @@ require("helpers")
 require("puppy.puppy")
 -- }}}
 
-local test_pop = puppy({
-                        app = "gvim",
-                        command = "-c TW",
-                        name = "taskw",
-                        })
+local test_pop = puppy({name = "test"})
                             
 
 -- {{{ Error handling
@@ -417,7 +413,8 @@ globalkeys = awful.util.table.join(
          end),
     awful.key({ modkey, "Ctrl" }, "t",
         function()
-            test_pop:toggle("test")
+            --test_pop:toggle("test")
+            test_pop:toggle()
          end),
     awful.key({ modkey, "Shift" }, "t",
         function()
