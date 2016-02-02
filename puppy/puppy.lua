@@ -1,9 +1,8 @@
--- Puppy, a popup application
+-- Puppy, manages "workspaces" of floating clients
 -- Based on the quake example at:
 -- http://awesome.naquadah.org/wiki/Drop-down_terminal
 
--- But modified to run any application supporting -name (instance)
--- as a popup client positioned anywhere on the screen.
+-- But modified to manage several applications positioned anywhere on the screen.
 
 -- Use:
 
@@ -37,6 +36,7 @@ local PuppyScreen = {}
 -- Namespace
 module("puppy")
 
+-- {{{ table functions from http://lua-users.org/wiki/SaveTableToFile
 do
    -- declare local variables
    --// exportstring( string )
@@ -143,15 +143,11 @@ do
    end
 -- close do
 end
+-- }}}
 
 -- Display
 function PuppyScreen:display()
   -- First, we locate the app
-  naughty.notify({ 
-    border_width = 0,
-    bg = beautiful.bg_focus,
-    fg = beautiful.fg_focus,
-    title = "Puppy display"})
 
   for k,v in capi.pairs(self.clients) do
     local client = nil
@@ -175,44 +171,15 @@ function PuppyScreen:display()
     end
 
     if not client then
-      -- The app is not here yet but we don't want it yet. Just do nothing.
+      -- The client is not here, do nothing.
       return
     end
-
-    --if not client then
-      ---- The client does not exist, we spawn it
-
-      --naughty.notify({ 
-        --border_width = 0,
-        --bg = beautiful.bg_focus,
-        --fg = beautiful.fg_focus,
-        --title = "Result of test"})
-        ----text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
-        ----text = "x: "..geo.x.." y: "..geo.y.." width: "..geo.width.." height: "..geo.height})--.." num: "..pos.num })
-      --awful.util.spawn(self.app .. " " .. string.format(self.argname, self.instance) .. " " ..self.command,
-      --false, self.screen)
-      --return
-    --end
-
-    -- Comptute size
-    --local geom = capi.screen[self.screen].workarea
-    --local width, height = self.width, self.height
-    --if width  <= 1 then width = geom.width * width end
-    --if height <= 1 then height = geom.height * height end
-    --local x, y
-    --if     self.horiz == "left"  then x = geom.x
-    --elseif self.horiz == "right" then x = geom.width + geom.x - width
-    --else   x = geom.x + (geom.width - width)/2 end
-    --if     self.vert == "top"    then y = geom.y
-    --elseif self.vert == "bottom" then y = geom.height + geom.y - height
-    --else   y = geom.y + (geom.height - height)/2 end
 
     -- Resize
     awful.client.floating.set(client, true)
     client.border_width = 0
     client.size_hints_honor = false
-    --client:geometry({ x = x, y = y, width = width, height = height })
-    client:geometry({ x = 1200, y = 30, width = 480, height = 480 })
+    client:geometry({ x = v["x"], y = v["y"], width = v["width"], height = v["height"] })
 
     -- Sticky and on top
     client.ontop = true
@@ -220,31 +187,19 @@ function PuppyScreen:display()
     client.skip_taskbar = true
     client.sticky = false
 
-    -- This is not a normal window, don't apply any specific keyboard stuff
-    --client:buttons({})
-    --client:keys({})
-
     -- Toggle display
     if self.visible then
       client.hidden = false
       client:raise()
       capi.client.focus = client
-      --naughty.notify({ 
-        --border_width = 0,
-        --bg = beautiful.bg_focus,
-        --fg = beautiful.fg_focus,
-        --title = "Result of test"})
-        --text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
-        --text = "x: "..geo.x.." y: "..geo.y.." width: "..geo.width.." height: "..geo.height})--.." num: "..pos.num })
     else
       client.hidden = true
     end
   end
 end
 
--- Create a console
+-- Create a configuration
 function PuppyScreen:new(config)
-  -- The "console" object is just its configuration.
 
   confdir = awful.util.getdir("config")
   config.clients = capi.table.load(confdir .. "/puppy-conf-" .. config.name)
@@ -263,35 +218,13 @@ function PuppyScreen:new(config)
   config.skip_taskbar = config.skip_taskbar or true
   config.sticky = config.sticky or true
   config.screen   = config.screen or capi.mouse.screen
-  config.visible  = config.visible or false -- Initially, not visible
 
   --capi.table.save(config, confdir .. "/pup")
-
-  -- The application to be invoked is:
-  --   config.app .. " " .. string.format(config.argname, config.name)
-  --config.app = config.app or "xterm" -- application to spawn
-  --config.command = config.command or "" -- command to run
-  --config.name     = config.name     or "PuppyScreenNeedsUniqueName" -- window name
-  --config.argname  = config.argname  or "-name %s"     -- how to specify window name
-
-  ---- If width or height <= 1 this is a proportion of the workspace
-  --config.height   = config.height   or 0.25           -- height
-  --config.width    = config.width    or 1          -- width
-  --config.vert     = config.vert     or "top"          -- top, bottom or center
-  --config.horiz    = config.horiz    or "center"       -- left, right or center
-
-  --config.screen   = config.screen or capi.mouse.screen
-  --config.visible  = config.visible or false -- Initially, not visible
 
   local puppyConfig = setmetatable(config, { __index = PuppyScreen })
     capi.client.connect_signal("manage",
     function(c)
       for k,v in capi.pairs(puppyConfig.clients) do
-        --naughty.notify({ 
-          --border_width = 0,
-          --bg = beautiful.bg_focus,
-          --fg = beautiful.fg_focus,
-          --title = "Inst: " .. k })
           if c.instance == k and c.screen == puppyConfig.screen then
             puppyConfig:display()
           end
@@ -312,20 +245,8 @@ function PuppyScreen:new(config)
   function()
     reattach:stop()
     puppyConfig:display()
-    naughty.notify({ 
-      border_width = 0,
-      bg = beautiful.bg_focus,
-      fg = beautiful.fg_focus,
-      title = "Reattach = true"})
   end)
   reattach:start()
-
-  --confdir = awful.util.getdir("config")
-  --local puppyClients = capi.table.load(confdir .. "/puppy-conf-" .. puppyConfig.name)
-  --for k, v in capi.pairs(puppyClients) do
-    --awful.util.spawn(v["cmdline"])
-  --end
-
   return puppyConfig
 end
 
@@ -335,24 +256,6 @@ function PuppyScreen:toggle()
   self:display()
 end
 
---function PuppyScreen:toggle(name)
-  --for c in awful.client.iterate(function (c)
-    ---- only save floating clients
-    ---- TODO: ..and clients handled by puppy
-    --return awful.client.floating.get(c)
-  --end,
-  --nil, self.screen) do
-    ----c.visible = not c.visible
-    --if c.hidden then
-      --c.hidden = false
-      --c:raise()
-      --capi.client.focus = c
-    --else
-       --c.hidden = true
-  --end
- --end
---end
-
 local function process_get_cmd(pid)
   local fp = capi.io.popen("xargs -0 < /proc/" .. pid .. "/cmdline")
   return fp:read()
@@ -361,9 +264,8 @@ end
 function PuppyScreen:save(name, screen)
   screen = screen or capi.mouse.screen
   local puppyClients = {}
-  --local i = 0
   for c in awful.client.iterate(function (c)
-    -- only save visible floating clients
+    -- save visible floating clients
     return awful.client.floating.get(c) and not c.hidden
   end,
   nil, screen) do
@@ -379,18 +281,23 @@ function PuppyScreen:save(name, screen)
                   x=c:geometry().x,
                   y=c:geometry().y
                 }
-    --i = i + 1
   end
   confdir = awful.util.getdir("config")
   capi.table.save(puppyClients, confdir .. "/puppy-conf-" .. name)
 end
 
 function PuppyScreen:launch(name)
+  self.visible  = false -- Initially, not visible
   confdir = awful.util.getdir("config")
   local puppyClients = capi.table.load(confdir .. "/puppy-conf-" .. name)
   for k, v in capi.pairs(puppyClients) do
     awful.util.spawn(v["cmdline"])
   end
+  naughty.notify({ 
+    border_width = 0,
+    bg = beautiful.bg_focus,
+    fg = beautiful.fg_focus,
+    title = "Puppy config " .. name .. " launched" })
 end
 
 setmetatable(_M, { __call = function(_, ...) return PuppyScreen:new(...) end })

@@ -2,13 +2,22 @@ return {
 -- Table: {1}
 {
    ["taskw"]={2},
+   ["mmail"]={3},
 },
 -- Table: {2}
 {
    ["height"]=480.0,
-   ["cmdline"]="gvim -name taskw -c TW",
-   ["x"]=1200.0,
-   ["width"]=480.0,
    ["y"]=30.0,
+   ["width"]=480.0,
+   ["x"]=1432.0,
+   ["cmdline"]="gvim -name taskw -c TW",
+},
+-- Table: {3}
+{
+   ["height"]=554.0,
+   ["y"]=516.0,
+   ["width"]=477.0,
+   ["x"]=1431.0,
+   ["cmdline"]="jumanji --name=mmail www.gmail.com",
 },
 }
