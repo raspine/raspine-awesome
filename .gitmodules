@@ -1,0 +1,3 @@
+[submodule "puppy"]
+	path = puppy
+	url = http://github.com/raspine/puppy
