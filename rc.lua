@@ -18,8 +18,8 @@ require("helpers")
 require("puppy.puppy")
 -- }}}
 
-local test_pop = puppy({name = "test"})
-                            
+local tasks_pop = puppy({name = "tasks"})
+
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -137,7 +137,7 @@ mytextclock = awful.widget.textclock()
 
 --{{{ Volume
  -- }}}
- 
+
 --{{{ CPU
 -- Initialize widget
 local widget_margin = 3
@@ -205,33 +205,6 @@ task_icon:buttons(awful.util.table.join( awful.button({ }, 1,
 function()
     --awful.util.spawn("uxterm -e vim -c TW")
     awful.util.spawn("gvim -name tasks -c TW")
-end)))
---}}}
-
---{{{ gmail
-gmail_icon = wibox.widget.imagebox()
-gmail_icon:set_image("/home/jsc/.config/awesome/icons/gmail.png")
-gmail_icon:buttons(awful.util.table.join( awful.button({ }, 1,
-function()
-    awful.util.spawn("vimb --name=gmail -C 'set useragent=Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1|set home-page=www.gmail.com'")
-end)))
---}}}
-
---{{{ twitter
-twitter_icon = wibox.widget.imagebox()
-twitter_icon:set_image("/home/jsc/.config/awesome/icons/twitter.png")
-twitter_icon:buttons(awful.util.table.join( awful.button({ }, 1,
-function()
-    awful.util.spawn("vimb --name=twitter -C 'set useragent=Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1|set home-page=www.twitter.com'")
-end)))
---}}}
-
---{{{ swedroid
-swedroid_icon = wibox.widget.imagebox()
-swedroid_icon:set_image("/home/jsc/.config/awesome/icons/swedroid.png")
-swedroid_icon:buttons(awful.util.table.join( awful.button({ }, 1,
-function()
-    awful.util.spawn("vimb --name=twitter -C 'set useragent=Mozilla/5.0 (Linux; U; Android 2.2; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1|set home-page=www.swedroid.com'")
 end)))
 --}}}
 
@@ -314,9 +287,6 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
-    right_layout:add(swedroid_icon)
-    right_layout:add(twitter_icon)
-    right_layout:add(gmail_icon)
     right_layout:add(task_icon)
     right_layout:add(netup_arrow)
     right_layout:add(netwidget)
@@ -350,7 +320,7 @@ globalkeys = awful.util.table.join(
   -- {{{ Tag browsing
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
-    awful.key({ modkey,  altkey         }, "h", 
+    awful.key({ modkey,  altkey         }, "h",
         function()
             local s = mouse.screen
             if client.focus then
@@ -398,11 +368,11 @@ globalkeys = awful.util.table.join(
     -- {{{ Test     (mod + t)
     awful.key({ modkey }, "t",
         function()
-            test_pop:save("test")
+            tasks_pop:save()
             --local pos = awful.client.idx(client.focus)
             --if pos then
             --local geo = client.focus.geometry(client.focus)
-            --naughty.notify({ 
+            --naughty.notify({
                              --border_width = 0,
                              --bg = beautiful.bg_focus,
                              --fg = beautiful.fg_focus,
@@ -413,12 +383,11 @@ globalkeys = awful.util.table.join(
          end),
     awful.key({ modkey, "Ctrl" }, "t",
         function()
-            --test_pop:toggle("test")
-            test_pop:toggle()
+            tasks_pop:toggle()
          end),
     awful.key({ modkey, "Shift" }, "t",
         function()
-            test_pop:launch("test")
+            tasks_pop:launch(mouse.screen)
          end),
     -- }}}
 
@@ -495,7 +464,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "h",
         function ()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.left then
-                -- We aim to swap left but this command always puts the slave window 
+                -- We aim to swap left but this command always puts the slave window
                 -- in the top of the slave column. So to keep the order of our slave
                 -- windows intact we we use history buffer and focus the last slave
                 -- window and swap this right.
@@ -524,7 +493,7 @@ globalkeys = awful.util.table.join(
                 awful.client.focus.history.previous()
                 awful.client.swap.bydirection("right")
             elseif awful.layout.get(client.focus.screen) == awful.layout.suit.tile then
-                -- We aim to swap right but this command always puts the slave window 
+                -- We aim to swap right but this command always puts the slave window
                 -- in the top of the slave column. So to keep the order of our slave
                 -- windows intact we we use history buffer and focus the last slave
                 -- window and swap this left.
@@ -541,7 +510,7 @@ globalkeys = awful.util.table.join(
     -- The concept for bottom/top layouts are the same as for left/right, no
     -- further comments
     awful.key({ modkey, "Shift"   }, "k",
-        function () 
+        function ()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.bottom then
                 awful.client.focus.bydirection("up")
                 awful.client.focus.history.previous()
@@ -558,7 +527,7 @@ globalkeys = awful.util.table.join(
     -- }}}
     -- {{{ Swap down       (mod + J)
     awful.key({ modkey, "Shift"   }, "j",
-        function () 
+        function ()
             if awful.layout.get(client.focus.screen) == awful.layout.suit.tile.bottom then
                 awful.client.focus.history.previous()
                 awful.client.swap.bydirection("up")
@@ -824,56 +793,20 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
-    { rule = { instance = "tasks" },
-      properties = {
-          floating = true,
-          border_width = 0,
-          x = 1200,
-          y = 30,
-          width = 480,
-          height = 480,
-          size_hints_honor = false,
-          opacity = 0.5,
-          above = true,
-          skip_taskbar = true,
-      }},
-    { rule = { instance = "gmail" },
-      properties = {
-          floating = true,
-          border_width = 0,
-          x = 1200,
-          y = 30,
-          width = 480,
-          height = 480,
-          size_hints_honor = false,
-          above = true,
-          skip_taskbar = true,
-      }},
-    { rule = { instance = "twitter" },
-      properties = {
-          floating = true,
-          border_width = 0,
-          x = 1200,
-          y = 30,
-          width = 480,
-          height = 480,
-          size_hints_honor = false,
-          above = true,
-          skip_taskbar = true,
-      }},
-    { rule = { instance = "swedroid" },
-      properties = {
-          floating = true,
-          border_width = 0,
-          x = 1200,
-          y = 30,
-          width = 480,
-          height = 480,
-          size_hints_honor = false,
-          above = true,
-          skip_taskbar = true,
-      }},
-    { rule = { instance = "gajim" },
+    --{ rule = { instance = "tasks" },
+      --properties = {
+          --floating = true,
+          --border_width = 0,
+          --x = 1200,
+          --y = 30,
+          --width = 480,
+          --height = 480,
+          --size_hints_honor = false,
+          --opacity = 0.5,
+          --above = true,
+          --skip_taskbar = true,
+      --}},
+   { rule = { instance = "gajim" },
       properties = {
           floating = true,
           border_width = 0,
