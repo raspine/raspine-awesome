@@ -19,16 +19,19 @@ require("helpers")
 require("puppy.puppy")
 -- }}}
 
-local tasks_pop = puppy({name = "tasks"})
-local social_pop = puppy({name = "social"})
-
--- define screens
-local mainScreen = 1
-local officeScreen = 1
+--{{{ Define screens
+local middleScreen = 1
+local rightScreen = 1
+local leftScreen = 1
 if screen.count() > 1 then
-    mainScreen  = 3
-    officeScreen = 2
+    middleScreen  = 1
+    rightScreen = 2
+    leftScreen = 3
 end
+-- }}}
+
+local tasks_pop = puppy({name = "tasks", screen = middleScreen})
+local social_pop = puppy({name = "social", screen = rightScreen})
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -392,7 +395,7 @@ globalkeys = awful.util.table.join(
          end),
     awful.key({ modkey, "Shift" }, "t",
         function()
-            tasks_pop:launch(mainSreen)
+            tasks_pop:launch(middleScreen)
          end),
     -- }}}
 
@@ -407,7 +410,7 @@ globalkeys = awful.util.table.join(
          end),
     awful.key({ modkey, "Shift" }, "s",
         function()
-            social_pop:launch(officeScreen)
+            social_pop:launch(rightScreen)
          end),
     -- }}}
 
@@ -615,14 +618,14 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- }}}
-    -- {{{ Move to first screen    (mod + Shift + F1)
-    awful.key({ modkey, "Shift"   }, "F1",     function(c) awful.client.movetoscreen(c,3) end),
+    -- {{{ Move to left screen    (mod + Shift + F1)
+    awful.key({ modkey, "Shift"   }, "F1",     function(c) awful.client.movetoscreen(c, leftScreen) end),
     -- }}}
-    -- {{{ Move to second screen    (mod + Shift + F2)
-    awful.key({ modkey, "Shift"   }, "F2",     function(c) awful.client.movetoscreen(c,1) end),
+    -- {{{ Move to middle screen    (mod + Shift + F2)
+    awful.key({ modkey, "Shift"   }, "F2",     function(c) awful.client.movetoscreen(c, middleScreen) end),
     -- }}}
-    -- {{{ Move to third screen    (mod + Shift + F3)
-    awful.key({ modkey, "Shift"   }, "F3",     function(c) awful.client.movetoscreen(c,2) end),
+    -- {{{ Move to right screen    (mod + Shift + F3)
+    awful.key({ modkey, "Shift"   }, "F3",     function(c) awful.client.movetoscreen(c, rightScreen) end),
     -- }}}
     -- {{{ Move to left screen    (mod + ctrl + H)
     -- TODO
