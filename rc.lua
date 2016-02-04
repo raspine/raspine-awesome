@@ -211,8 +211,7 @@ task_icon = wibox.widget.imagebox()
 task_icon:set_image("/home/jsc/.config/awesome/icons/taskw.png")
 task_icon:buttons(awful.util.table.join( awful.button({ }, 1,
 function()
-    --awful.util.spawn("uxterm -e vim -c TW")
-    awful.util.spawn("gvim -name tasks -c TW")
+    tasks_pop:toggle()
 end)))
 --}}}
 
@@ -805,7 +804,7 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
-    --{ rule = { instance = "tasks" },
+   --{ rule = { instance = "gajim" },
       --properties = {
           --floating = true,
           --border_width = 0,
@@ -814,22 +813,9 @@ awful.rules.rules = {
           --width = 480,
           --height = 480,
           --size_hints_honor = false,
-          --opacity = 0.5,
           --above = true,
           --skip_taskbar = true,
       --}},
-   { rule = { instance = "gajim" },
-      properties = {
-          floating = true,
-          border_width = 0,
-          x = 1200,
-          y = 30,
-          width = 480,
-          height = 480,
-          size_hints_honor = false,
-          above = true,
-          skip_taskbar = true,
-      }},
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
