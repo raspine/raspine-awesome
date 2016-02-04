@@ -1,11 +1,12 @@
-#peru
+# directories
 .peru/
 themes/
 vicious/
 lain/
 
-#vim
+# files
 *~
+puppy-conf*
 
 #ctags
 tags
