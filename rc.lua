@@ -19,7 +19,15 @@ require("puppy.puppy")
 -- }}}
 
 local tasks_pop = puppy({name = "tasks"})
+local social_pop = puppy({name = "social"})
 
+-- define screens
+local mainScreen = 1
+local officeScreen = 1
+if screen.count() > 1 then
+    mainScreen  = 3
+    officeScreen = 2
+end
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -365,29 +373,33 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control"   }, "a", function () awful.util.spawn("gvim /home/jsc/.config/awesome/rc.lua")    end),
     -- }}}
 
-    -- {{{ Test     (mod + t)
+    -- {{{ Puppy tasks     (mod + t)
     awful.key({ modkey }, "t",
-        function()
-            tasks_pop:save()
-            --local pos = awful.client.idx(client.focus)
-            --if pos then
-            --local geo = client.focus.geometry(client.focus)
-            --naughty.notify({
-                             --border_width = 0,
-                             --bg = beautiful.bg_focus,
-                             --fg = beautiful.fg_focus,
-                             --title = "Result of test",
-                             ----text = "col: "..pos.col.." idx: "..pos.idx.." num: "..pos.num })
-                             --text = "x: "..geo.x.." y: "..geo.y.." width: "..geo.width.." height: "..geo.height})--.." num: "..pos.num })
-           --end
-         end),
-    awful.key({ modkey, "Ctrl" }, "t",
         function()
             tasks_pop:toggle()
          end),
+    awful.key({ modkey, "Ctrl" }, "t",
+        function()
+            tasks_pop:save()
+         end),
     awful.key({ modkey, "Shift" }, "t",
         function()
-            tasks_pop:launch(mouse.screen)
+            tasks_pop:launch(mainSreen)
+         end),
+    -- }}}
+
+    -- {{{ Puppy social     (mod + s)
+    awful.key({ modkey }, "s",
+        function()
+            social_pop:toggle()
+         end),
+    awful.key({ modkey, "Ctrl" }, "s",
+        function()
+            social_pop:save()
+         end),
+    awful.key({ modkey, "Shift" }, "s",
+        function()
+            social_pop:launch(officeScreen)
          end),
     -- }}}
 
