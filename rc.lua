@@ -24,8 +24,8 @@ local middleScreen = 1
 local rightScreen = 1
 local leftScreen = 1
 if screen.count() > 1 then
-    middleScreen  = 1
-    rightScreen = 2
+    middleScreen  = 2
+    rightScreen = 1
     leftScreen = 3
 end
 -- }}}
@@ -80,8 +80,9 @@ beautiful.init(awful.util.getdir("config") .. "/themes/material/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 --terminal = "xterm -ls -xrm 'XTerm*selectToClipboard: true'"
-terminal = "xterm -ls -xrm 'XTerm*selectToClipboard: true'"
---terminal = "gnome-terminal"
+--terminal = "xterm -ls -xrm 'XTerm*selectToClipboard: true'"
+terminal = "urxvt"
+terminal_cwd = "urxvt -cd"
 editor = os.getenv("EDITOR") or "gvim" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -381,7 +382,7 @@ globalkeys = awful.util.table.join(
     --}}}
 
     -- {{{ Config files
-    awful.key({ modkey, "Control"   }, "a", function () awful.util.spawn("gvim /home/jsc/.config/awesome/rc.lua")    end),
+    awful.key({ modkey, "Control"   }, "a", function () awful.util.spawn("gvim /home/jsc/.config/awesome/rc.lua -c 'cd %:h'")    end),
     -- }}}
 
     -- {{{ Puppy tasks     (mod + t)

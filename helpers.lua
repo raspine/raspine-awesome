@@ -42,7 +42,7 @@ function open_terminal_same_cwd(client)
 
   local cwd = process_get_cwd(pid)
   if cwd then
-    awful.util.spawn_with_shell("xterm -e 'cd " .. cwd .. " && /bin/bash'")
+    awful.util.spawn_with_shell(terminal_cwd .. " " .. cwd)
   else
     awful.util.spawn(terminal)
   end
