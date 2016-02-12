@@ -349,11 +349,11 @@ globalkeys = awful.util.table.join(
 
             -- if we are on screen 1 or 3, we shift tags on both screens
             awful.tag.viewprev(s)
-            if screen.count() > 1 and s == 1 then
-                awful.tag.viewprev(3)
+            if screen.count() > 1 and s == leftScreen then
+                awful.tag.viewprev(middleScreen)
             end
-            if screen.count() > 1 and s == 3 then
-                awful.tag.viewprev(1)
+            if screen.count() > 1 and s == middleScreen then
+                awful.tag.viewprev(leftScreen)
             end
         end
     ),
@@ -364,13 +364,13 @@ globalkeys = awful.util.table.join(
                 s = client.focus.screen
             end
 
-            -- if we are on screen 1 or 3, we shift tags on both screens
             awful.tag.viewnext(s)
-            if screen.count() > 1 and s == 1 then
-                awful.tag.viewnext(3)
+            -- if we are on left or middle screen, we shift tags on both screens
+            if screen.count() > 1 and s == leftScreen then
+                awful.tag.viewnext(middleScreen)
             end
-            if screen.count() > 1 and s == 3 then
-                awful.tag.viewnext(1)
+            if screen.count() > 1 and s == middleScreen then
+                awful.tag.viewnext(leftScreen)
             end
         end
     ),
