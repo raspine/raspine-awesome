@@ -32,6 +32,7 @@ end
 
 local tasks_pop = puppy({name = "tasks", screen = middleScreen})
 local social_pop = puppy({name = "social", screen = rightScreen})
+local calender_pop = puppy({name = "calender", screen = middleScreen})
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -147,9 +148,11 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
-
---{{{ Volume
- -- }}}
+mytextclock:buttons(awful.util.table.join(
+    awful.button({ }, 1, function() calender_pop:toggle() end),
+    awful.button({ }, 2, function() calender_pop:save() end),
+    awful.button({ }, 3, function() calender_pop:launch() end)
+    ))
 
 --{{{ CPU
 -- Initialize widget
@@ -225,6 +228,15 @@ task_icon:set_image("/home/jsc/.config/awesome/icons/taskw.png")
 task_icon:buttons(awful.util.table.join( awful.button({ }, 1,
 function()
     tasks_pop:toggle()
+end)))
+--}}}
+
+--{{{ Audio config
+audio_icon = wibox.widget.imagebox()
+audio_icon:set_image("/home/jsc/.config/awesome/icons/speaker.png")
+audio_icon:buttons(awful.util.table.join( awful.button({ }, 1,
+function()
+    awful.util.spawn("gnome-control-center sound")
 end)))
 --}}}
 
@@ -308,6 +320,7 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(task_icon)
+    right_layout:add(audio_icon)
     right_layout:add(netup_arrow)
     right_layout:add(netwidget)
     right_layout:add(netdown_arrow)
