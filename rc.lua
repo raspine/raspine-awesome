@@ -33,6 +33,7 @@ end
 local tasks_pop = puppy({name = "tasks", screen = middleScreen})
 local social_pop = puppy({name = "social", screen = rightScreen})
 local calender_pop = puppy({name = "calender", screen = middleScreen})
+local pidgin_pop = puppy({name = "pidgin", screen = middleScreen})
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -428,7 +429,22 @@ globalkeys = awful.util.table.join(
          end),
     awful.key({ modkey, "Shift" }, "s",
         function()
-            social_pop:launch(rightScreen)
+            social_pop:launch(middleScreen)
+         end),
+    -- }}}
+
+    -- {{{ Puppy pidgin     (mod + t)
+    awful.key({ modkey }, "p",
+        function()
+            pidgin_pop:toggle()
+         end),
+    awful.key({ modkey, "Ctrl" }, "p",
+        function()
+            pidgin_pop:save()
+         end),
+    awful.key({ modkey, "Shift" }, "p",
+        function()
+            pidgin_pop:launch(middleScreen)
          end),
     -- }}}
 
@@ -712,7 +728,7 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end)
+    awful.key({ modkey }, "e", function() menubar.show() end)
     --}}}
 
 )
