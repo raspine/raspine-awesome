@@ -17,6 +17,7 @@ local menubar = require("menubar")
 local vicious = require("vicious")
 require("helpers")
 require("puppy.puppy")
+local layout_indicator = require("keyboard-layout-indicator.keyboard-layout-indicator")
 -- }}}
 
 --{{{ Define screens
@@ -106,6 +107,14 @@ local layouts =
     awful.layout.suit.fair,
     awful.layout.suit.floating,
 }
+
+-- define your layouts
+kbdcfg = layout_indicator({
+    layouts = {
+        {name="se",  layout="se",  variant=nil},
+        {name="en",  layout="gb",  variant=nil}
+    }
+})
 -- }}}
 
 -- {{{ Wallpaper
@@ -147,13 +156,27 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- }}}
 
 -- {{{ Wibox
--- Create a textclock widget
+--{{{ Textclock widget
 mytextclock = awful.widget.textclock()
 mytextclock:buttons(awful.util.table.join(
     awful.button({ }, 1, function() calender_pop:toggle() end),
     awful.button({ }, 2, function() calender_pop:save() end),
     awful.button({ }, 3, function() calender_pop:launch() end)
     ))
+--}}}
+
+--{{{ Keyboard layout
+--kbdcfg.widget:buttons(awful.util.table.join(
+    --kbdcfg.widget:buttons(),
+    --awful.button({ }, 2, 
+        --function ()
+            --awful.prompt.run(
+                --{ prompt="Run: ", text="setxkbmap " },
+                --mypromptbox[mouse.screen].widget,
+                --function(cmd) kbdcfg:setcustom(cmd) end )
+        --end)
+--))
+--}}}
 
 --{{{ CPU
 -- Initialize widget
@@ -331,6 +354,7 @@ for s = 1, screen.count() do
     right_layout:add(netdown_arrow)
     right_layout:add(memwidget)
     right_layout:add(cpuwidget)
+    right_layout:add(kbdcfg.widget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
@@ -369,9 +393,11 @@ globalkeys = awful.util.table.join(
             awful.tag.viewprev(s)
             if screen.count() > 1 and s == leftScreen then
                 awful.tag.viewprev(middleScreen)
+                awful.screen.focus(leftScreen)
             end
             if screen.count() > 1 and s == middleScreen then
                 awful.tag.viewprev(leftScreen)
+                awful.screen.focus(middleScreen)
             end
         end
     ),
@@ -386,9 +412,11 @@ globalkeys = awful.util.table.join(
             -- if we are on left or middle screen, we shift tags on both screens
             if screen.count() > 1 and s == leftScreen then
                 awful.tag.viewnext(middleScreen)
+                awful.screen.focus(leftScreen)
             end
             if screen.count() > 1 and s == middleScreen then
                 awful.tag.viewnext(leftScreen)
+                awful.screen.focus(middleScreen)
             end
         end
     ),
@@ -680,14 +708,14 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Screen manipulation
-    -- {{{ Focus first screen    (mod + F1)
-    awful.key({ modkey,           }, "F1",     function(c) awful.screen.focus(3) end),
+    -- {{{ Focus left screen    (mod + F1)
+    awful.key({ modkey,           }, "F1",     function(c) awful.screen.focus(leftScreen) end),
     -- }}}
-    -- {{{ Focus second screen    (mod + F2)
-    awful.key({ modkey,           }, "F2",     function(c) awful.screen.focus(1) end),
+    -- {{{ Focus middle screen    (mod + F2)
+    awful.key({ modkey,           }, "F2",     function(c) awful.screen.focus(middleScreen) end),
     -- }}}
-    -- {{{ Focus third screen    (mod + F3)
-    awful.key({ modkey,           }, "F3",     function(c) awful.screen.focus(2) end),
+    -- {{{ Focus right screen    (mod + F3)
+    awful.key({ modkey,           }, "F3",     function(c) awful.screen.focus(rightScreen) end),
     -- }}}
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     -- }}}
