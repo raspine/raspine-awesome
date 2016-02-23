@@ -399,6 +399,16 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
     --}}}
 
+    --{{{ Screenshot (prtscr)
+   awful.key(
+       {},
+       "Print",
+       function()
+           awful.util.spawn("/home/jsc/.bin/capscr",false)
+       end
+   ),
+    --}}}
+
     -- {{{ Config files
     awful.key({ modkey, "Control"   }, "a", function () awful.util.spawn("gvim /home/jsc/.config/awesome/rc.lua -c 'cd %:h'")    end),
     -- }}}
