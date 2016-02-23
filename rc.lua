@@ -17,6 +17,7 @@ local menubar = require("menubar")
 local vicious = require("vicious")
 require("helpers")
 require("puppy.puppy")
+local layout_indicator = require("keyboard-layout-indicator.keyboard-layout-indicator")
 -- }}}
 
 --{{{ Define screens
@@ -106,6 +107,14 @@ local layouts =
     awful.layout.suit.fair,
     awful.layout.suit.floating,
 }
+
+-- define your layouts
+kbdcfg = layout_indicator({
+    layouts = {
+        {name="se",  layout="se",  variant=nil},
+        {name="us",  layout="us",  variant=nil}
+    }
+})
 -- }}}
 
 -- {{{ Wallpaper
@@ -147,13 +156,27 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- }}}
 
 -- {{{ Wibox
--- Create a textclock widget
+--{{{ Textclock widget
 mytextclock = awful.widget.textclock()
 mytextclock:buttons(awful.util.table.join(
     awful.button({ }, 1, function() calender_pop:toggle() end),
     awful.button({ }, 2, function() calender_pop:save() end),
     awful.button({ }, 3, function() calender_pop:launch() end)
     ))
+--}}}
+
+--{{{ Keyboard layout
+--kbdcfg.widget:buttons(awful.util.table.join(
+    --kbdcfg.widget:buttons(),
+    --awful.button({ }, 2, 
+        --function ()
+            --awful.prompt.run(
+                --{ prompt="Run: ", text="setxkbmap " },
+                --mypromptbox[mouse.screen].widget,
+                --function(cmd) kbdcfg:setcustom(cmd) end )
+        --end)
+--))
+--}}}
 
 --{{{ CPU
 -- Initialize widget
@@ -331,6 +354,7 @@ for s = 1, screen.count() do
     right_layout:add(netdown_arrow)
     right_layout:add(memwidget)
     right_layout:add(cpuwidget)
+    right_layout:add(kbdcfg.widget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 

@@ -3,11 +3,12 @@ imports:
     holo-theme: themes
     vicious: vicious
     lain: lain
+    kbd_layout: keyboard-layout-indicator
 
 git module material-theme:
     url: https://github.com/raspine/awesome-material-theme
     reup: master
-    rev: ad9cf75c746fc81351f28f448993305655cf87a8
+    rev: 8145b590f30b6543a5d8498c40762a526b247081
 
 git module holo-theme:
     url: https://github.com/mikar/awesome-themes
@@ -23,9 +24,15 @@ git module vicious:
 git module lain:
     url: https://github.com/copycat-killer/lain.git
     reup: master
-    rev: 27ebd0a30d9634ea403a4c9f3c2139c2498faaea
+    rev: 4d664adc0132c8d110cde257227557dd7deac48b
     pick:
       - "*.lua" # import root files
       - widgets
       - util
       - layout
+
+git module kbd_layout:
+        url: https://github.com/coldfix/awesome.keyboard-layout-indicator.git
+        reup: master
+        rev: c3a893304bda7ff4a067ea0d683101c835ffeee8
+
