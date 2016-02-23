@@ -393,9 +393,11 @@ globalkeys = awful.util.table.join(
             awful.tag.viewprev(s)
             if screen.count() > 1 and s == leftScreen then
                 awful.tag.viewprev(middleScreen)
+                awful.screen.focus(leftScreen)
             end
             if screen.count() > 1 and s == middleScreen then
                 awful.tag.viewprev(leftScreen)
+                awful.screen.focus(middleScreen)
             end
         end
     ),
@@ -410,9 +412,11 @@ globalkeys = awful.util.table.join(
             -- if we are on left or middle screen, we shift tags on both screens
             if screen.count() > 1 and s == leftScreen then
                 awful.tag.viewnext(middleScreen)
+                awful.screen.focus(leftScreen)
             end
             if screen.count() > 1 and s == middleScreen then
                 awful.tag.viewnext(leftScreen)
+                awful.screen.focus(middleScreen)
             end
         end
     ),
@@ -694,14 +698,14 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Screen manipulation
-    -- {{{ Focus first screen    (mod + F1)
-    awful.key({ modkey,           }, "F1",     function(c) awful.screen.focus(3) end),
+    -- {{{ Focus left screen    (mod + F1)
+    awful.key({ modkey,           }, "F1",     function(c) awful.screen.focus(leftScreen) end),
     -- }}}
-    -- {{{ Focus second screen    (mod + F2)
-    awful.key({ modkey,           }, "F2",     function(c) awful.screen.focus(1) end),
+    -- {{{ Focus middle screen    (mod + F2)
+    awful.key({ modkey,           }, "F2",     function(c) awful.screen.focus(middleScreen) end),
     -- }}}
-    -- {{{ Focus third screen    (mod + F3)
-    awful.key({ modkey,           }, "F3",     function(c) awful.screen.focus(2) end),
+    -- {{{ Focus right screen    (mod + F3)
+    awful.key({ modkey,           }, "F3",     function(c) awful.screen.focus(rightScreen) end),
     -- }}}
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     -- }}}
