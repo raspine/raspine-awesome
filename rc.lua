@@ -112,7 +112,7 @@ local layouts =
 kbdcfg = layout_indicator({
     layouts = {
         {name="se",  layout="se",  variant=nil},
-        {name="us",  layout="us",  variant=nil}
+        {name="en",  layout="gb",  variant=nil}
     }
 })
 -- }}}
