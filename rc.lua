@@ -165,27 +165,28 @@ mytextclock:buttons(awful.util.table.join(
     ))
 --}}}
 
+local widget_margin = 3
+
 --{{{ Keyboard layout
---kbdcfg.widget:buttons(awful.util.table.join(
-    --kbdcfg.widget:buttons(),
-    --awful.button({ }, 2, 
-        --function ()
-            --awful.prompt.run(
-                --{ prompt="Run: ", text="setxkbmap " },
-                --mypromptbox[mouse.screen].widget,
-                --function(cmd) kbdcfg:setcustom(cmd) end )
-        --end)
---))
+local kbdwidget_bg = wibox.widget.background()
+kbdwidget_bg:set_widget(kbdcfg.widget)
+kbdwidget_bg:set_bg(beautiful.widget_bg)
+kbdwidget_bg:set_fg(beautiful.widget_fg)
+local kbdwidget = wibox.layout.margin()
+kbdwidget:set_widget(kbdwidget_bg)
+kbdwidget:set_right(widget_margin)
 --}}}
 
 --{{{ CPU
 -- Initialize widget
-local widget_margin = 3
 local cpuwidget_text = wibox.widget.textbox()
-local cpuwidget = wibox.widget.background()
-cpuwidget:set_widget(cpuwidget_text)
-cpuwidget:set_bg(beautiful.widget_bg)
-cpuwidget:set_fg(beautiful.widget_fg)
+local cpuwidget_bg = wibox.widget.background()
+cpuwidget_bg:set_widget(cpuwidget_text)
+cpuwidget_bg:set_bg(beautiful.widget_bg)
+cpuwidget_bg:set_fg(beautiful.widget_fg)
+local cpuwidget = wibox.layout.margin()
+cpuwidget:set_widget(cpuwidget_bg)
+cpuwidget:set_right(widget_margin)
 -- Register widget
 vicious.register(cpuwidget_text, vicious.widgets.cpu, "cpu: $1%")-- Initialize widget
 -- }}}
@@ -354,7 +355,7 @@ for s = 1, screen.count() do
     right_layout:add(netdown_arrow)
     right_layout:add(memwidget)
     right_layout:add(cpuwidget)
-    right_layout:add(kbdcfg.widget)
+    right_layout:add(kbdwidget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
