@@ -487,6 +487,13 @@ globalkeys = awful.util.table.join(
          end),
     -- }}}
 
+    -- {{{ Keyboard layout toggle     (mod + z)
+    awful.key({ modkey }, "z",
+        function()
+            kbdcfg:next()
+         end),
+    -- }}}
+
     -- {{{ Client focus
     -- {{{ Focus left       (mod + h)
     awful.key({ modkey }, "h",
