@@ -104,7 +104,6 @@ local layouts =
     awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
     awful.layout.suit.floating,
 }
 
@@ -729,12 +728,12 @@ globalkeys = awful.util.table.join(
     -- }}}
 
     -- {{{ Layout manipulation
-    awful.key({ modkey, "Shift"   }, "Right",     function () awful.tag.incmwfact( 0.05)    end),
-    awful.key({ modkey, "Shift"   }, "Left",     function () awful.tag.incmwfact(-0.05)    end),
-    --awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
-    --awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
-    --awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
-    --awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
+    awful.key({ modkey, "Shift"   }, "Right", function () awful.tag.incmwfact( 0.05) end),
+    awful.key({ modkey, "Shift"   }, "Left",  function () awful.tag.incmwfact(-0.05) end),
+    awful.key({ modkey,           }, "Up",    function () awful.tag.incnmaster( 1) end),
+    awful.key({ modkey,           }, "Down",  function () awful.tag.incnmaster(-1) end),
+    awful.key({ modkey, "Shift"   }, "Up",    function () awful.tag.incncol( 1) end),
+    awful.key({ modkey, "Shift"   }, "Down",  function () awful.tag.incncol(-1) end),
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
     --}}}
