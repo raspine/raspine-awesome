@@ -8,7 +8,7 @@ imports:
 git module material-theme:
     url: https://github.com/raspine/awesome-material-theme
     reup: master
-    rev: 8145b590f30b6543a5d8498c40762a526b247081
+    rev: f3397eb464540653941e9448362901722e71bad2
 
 git module holo-theme:
     url: https://github.com/mikar/awesome-themes
