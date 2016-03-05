@@ -914,6 +914,14 @@ awful.rules.rules = {
 -- }}}
 
 -- {{{ Signals
+
+dbus.request_name("session", "im.pidgin.purple.PurpleService")
+dbus.add_match("session", "interface='im.pidgin.purple.PurpleInterface', member='ReceivedImMsg'")
+dbus.connect_signal("im.pidgin.purple.PurpleInterface",
+function(...)
+    pidgin_pop:setvisible()
+end)
+
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function (c, startup)
     -- Enable sloppy focus
