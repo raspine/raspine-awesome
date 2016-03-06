@@ -919,7 +919,7 @@ dbus.request_name("session", "im.pidgin.purple.PurpleService")
 dbus.add_match("session", "interface='im.pidgin.purple.PurpleInterface', member='ReceivedImMsg'")
 dbus.connect_signal("im.pidgin.purple.PurpleInterface",
 function(...)
-    pidgin_pop:setvisible()
+    pidgin_pop:pop()
 end)
 
 -- Signal function to execute when a new client appears.
