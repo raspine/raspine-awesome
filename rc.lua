@@ -756,7 +756,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Ctrl" }, "c", function () awful.util.spawn("chromium") end),
     awful.key({ modkey, "Ctrl" }, "f", function () awful.util.spawn("firefox") end),
     awful.key({ modkey, "Ctrl" }, "v", function () awful.util.spawn("xterm -e vifm") end),
-    awful.key({ modkey, "Ctrl" }, "g", function () awful.util.spawn("gvim") end),
+    awful.key({ modkey, "Ctrl" }, "g", function () awful.util.spawn("gvim -E") end),
     --}}}
 
     -- {{{ Prompt
